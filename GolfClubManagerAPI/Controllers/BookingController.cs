@@ -38,23 +38,27 @@ public class BookingsController : ControllerBase
     /// Add a member to a tee time slot.
     /// </summary>
     [HttpPost]
-    public async Task<IActionResult> BookTeeTime([FromBody] TeeTimeBooking booking)
+    [HttpPost]
+    public async Task<IActionResult> BookTeeTime(TeeTimeBooking booking)
     {
-        var slot = await _context.TeeTimeSlots
-            .Include(s => s.Bookings)
-            .FirstOrDefaultAsync(s => s.Id == booking.TeeTimeSlotId);
+        // Ensure the Member has not already booked a slot on the same day
+        bool hasExistingBooking = await _context.TeeTimeBookings
+            .Include(b => b.TeeTimeSlot) // Join with TeeTimeSlots
+            .AnyAsync(b => b.MemberId == booking.MemberId &&
+                           b.TeeTimeSlot.BookingTime.Date == booking.TeeTimeSlot.BookingTime.Date);
 
-        if (slot == null)
-            return NotFound("Tee time slot not found.");
+        if (hasExistingBooking)
+        {
+            return BadRequest("You can only book one tee time per day.");
+        }
 
-        if (slot.Bookings.Count >= 4)
-            return BadRequest("This tee time is already full.");
-
+        // Proceed with booking
         _context.TeeTimeBookings.Add(booking);
         await _context.SaveChangesAsync();
-
-        return Ok();
+        return Ok(booking);
     }
+
+
 
     /// <summary>
     /// Cancel all bookings in a tee time slot.

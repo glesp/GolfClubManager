@@ -32,11 +32,17 @@ public class BookingService
     /// <summary>
     /// Attempt to book a tee time for a member
     /// </summary>
-    public async Task<bool> BookTeeTimeAsync(TeeTimeBooking booking)
+    public async Task<string> BookTeeTimeAsync(TeeTimeBooking booking)
     {
         var response = await _httpClient.PostAsJsonAsync(ApiBaseUrl, booking);
-        return response.IsSuccessStatusCode;
+
+        if (response.IsSuccessStatusCode)
+            return "Success";
+
+        var errorMessage = await response.Content.ReadAsStringAsync();
+        return errorMessage;
     }
+
 
     /// <summary>
     /// Delete a booking (cancel)
