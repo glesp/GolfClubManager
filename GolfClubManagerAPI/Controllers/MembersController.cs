@@ -19,6 +19,10 @@ public class MembersController : ControllerBase
     public IActionResult GetMembers()
     {
         var members = _context.Members.ToList();
+        if (!members.Any())  // 🛑 DEBUG: Check if data exists
+        {
+            Console.WriteLine("❌ No members found in DB!");
+        }
         return Ok(members);
     }
 }

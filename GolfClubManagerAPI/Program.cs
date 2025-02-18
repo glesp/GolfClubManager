@@ -10,12 +10,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowBlazorClient",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5158") // 
+            policy.WithOrigins("http://localhost:5158") //
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
         });
 });
+
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -37,6 +38,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowBlazorClient");
+
 
 
 app.MapControllers();
