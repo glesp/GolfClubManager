@@ -1,31 +1,27 @@
 @page "/bookings"
-@using GolfClubManagerWASM.Models
-@using GolfClubManagerWASM.Services
-@inject BookingService BookingService
+@inject HttpClient Http
 
 <h3>Tee Time Bookings</h3>
 
 @if (bookings == null)
 {
-    <p>Loading...</p>
+    <p>Loading bookings...</p>
 }
 else
 {
-    <table>
+    <table class="table">
         <thead>
         <tr>
-            <th>Booking Time</th>
-            <th>Member ID</th>
-            <th>Action</th>
+            <th>Time</th>
+            <th>Players</th>
         </tr>
         </thead>
         <tbody>
         @foreach (var booking in bookings)
         {
             <tr>
-                <td>@booking.BookingTime</td>
-                <td>@booking.MemberId</td>
-                <td><button @onclick="() => CancelBooking(booking.Id)">Cancel</button></td>
+                <td>@booking.BookingTime.ToString("hh:mm tt")</td>
+                <td>@string.Join(", ", booking.Players)</td>
             </tr>
         }
         </tbody>
@@ -33,18 +29,16 @@ else
 }
 
 @code {
-    private List<TeeTimeBooking>? bookings;
+    private List<TeeTimeBookingViewModel> bookings;
 
     protected override async Task OnInitializedAsync()
     {
-        bookings = await BookingService.GetBookingsAsync();
+        bookings = await Http.GetFromJsonAsync<List<TeeTimeBookingViewModel>>("http://localhost:5080/api/bookings");
     }
 
-    private async Task CancelBooking(int bookingId)
+    private class TeeTimeBookingViewModel
     {
-        if (await BookingService.CancelBookingAsync(bookingId))
-        {
-            bookings = await BookingService.GetBookingsAsync();
-        }
+        public DateTime BookingTime { get; set; }
+        public List<string> Players { get; set; } = new();
     }
 }

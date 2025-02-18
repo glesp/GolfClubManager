@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GolfClubManagerAPI.Data;
+using GolfClubManagerAPI.Models;
 
-namespace GolfClubManagerAPI.Controllers;
-
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/bookings")]
 public class BookingsController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
@@ -15,64 +14,61 @@ public class BookingsController : ControllerBase
         _context = context;
     }
 
-    // GET: api/bookings
+    /// <summary>
+    /// Get all tee time slots with their players.
+    /// </summary>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TeeTimeBooking>>> GetBookings()
+    public async Task<IActionResult> GetBookings()
     {
-        return await _context.TeeTimeBookings.ToListAsync();
+        var bookings = await _context.TeeTimeSlots
+            .Include(slot => slot.Bookings)
+                .ThenInclude(booking => booking.Member) // Include player details
+            .Select(slot => new
+            {
+                SlotId = slot.Id,
+                BookingTime = slot.BookingTime,
+                Players = slot.Bookings.Select(b => b.Member.Name).ToList()
+            })
+            .ToListAsync();
+
+        return Ok(bookings);
     }
 
-    // GET: api/bookings/available
-    [HttpGet("available")]
-    public async Task<ActionResult<IEnumerable<DateTime>>> GetAvailableTeeTimes()
-    {
-        var allTimes = Enumerable.Range(0, 24 * 4)
-            .Select(i => DateTime.Today.AddMinutes(i * 15)) // Generate 15-min slots
-            .Where(t => !_context.TeeTimeBookings.Any(b => b.BookingTime == t))
-            .ToList();
-
-        return Ok(allTimes);
-    }
-
-    // POST: api/bookings
+    /// <summary>
+    /// Add a member to a tee time slot.
+    /// </summary>
     [HttpPost]
-    public async Task<IActionResult> CreateBooking(TeeTimeBooking booking)
+    public async Task<IActionResult> BookTeeTime([FromBody] TeeTimeBooking booking)
     {
-        // Check if the member already has a booking for the day
-        var hasBooking = await _context.TeeTimeBookings
-            .AnyAsync(b => b.MemberId == booking.MemberId && b.BookingTime.Date == booking.BookingTime.Date);
+        var slot = await _context.TeeTimeSlots
+            .Include(s => s.Bookings)
+            .FirstOrDefaultAsync(s => s.Id == booking.TeeTimeSlotId);
 
-        if (hasBooking)
-        {
-            return BadRequest("Member already has a booking for this day.");
-        }
+        if (slot == null)
+            return NotFound("Tee time slot not found.");
 
-        // Check if there are already 4 players for this slot
-        var count = await _context.TeeTimeBookings
-            .CountAsync(b => b.BookingTime == booking.BookingTime);
-
-        if (count >= 4)
-        {
-            return BadRequest("This time slot is fully booked.");
-        }
+        if (slot.Bookings.Count >= 4)
+            return BadRequest("This tee time is already full.");
 
         _context.TeeTimeBookings.Add(booking);
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetBookings), new { id = booking.Id }, booking);
+
+        return Ok();
     }
 
-    // DELETE: api/bookings/{id}
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> CancelBooking(int id)
+    /// <summary>
+    /// Cancel all bookings in a tee time slot.
+    /// </summary>
+    [HttpDelete("{slotId}")]
+    public async Task<IActionResult> CancelBooking(int slotId)
     {
-        var booking = await _context.TeeTimeBookings.FindAsync(id);
-        if (booking == null)
-        {
-            return NotFound();
-        }
+        var bookings = _context.TeeTimeBookings.Where(b => b.TeeTimeSlotId == slotId);
 
-        _context.TeeTimeBookings.Remove(booking);
+        if (!bookings.Any()) return NotFound();
+
+        _context.TeeTimeBookings.RemoveRange(bookings);
         await _context.SaveChangesAsync();
+
         return NoContent();
     }
 }

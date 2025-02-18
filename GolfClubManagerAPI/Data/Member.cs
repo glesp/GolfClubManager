@@ -1,11 +1,13 @@
-namespace GolfClubManagerAPI.Data;
-
-public class Member
+namespace GolfClubManagerAPI.Models
 {
-    public int Id { get; set; }
-    public string MembershipNumber { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string Gender { get; set; } = "Other";
-    public int Handicap { get; set; }
+    public class Member
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public int Handicap { get; set; }
+
+        // Navigation property to bookings
+        public List<TeeTimeBooking> Bookings { get; set; } = new();
+    }
 }
