@@ -1,0 +1,50 @@
+@page "/bookings"
+@using GolfClubManagerWASM.Models
+@using GolfClubManagerWASM.Services
+@inject BookingService BookingService
+
+<h3>Tee Time Bookings</h3>
+
+@if (bookings == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table>
+        <thead>
+        <tr>
+            <th>Booking Time</th>
+            <th>Member ID</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var booking in bookings)
+        {
+            <tr>
+                <td>@booking.BookingTime</td>
+                <td>@booking.MemberId</td>
+                <td><button @onclick="() => CancelBooking(booking.Id)">Cancel</button></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<TeeTimeBooking>? bookings;
+
+    protected override async Task OnInitializedAsync()
+    {
+        bookings = await BookingService.GetBookingsAsync();
+    }
+
+    private async Task CancelBooking(int bookingId)
+    {
+        if (await BookingService.CancelBookingAsync(bookingId))
+        {
+            bookings = await BookingService.GetBookingsAsync();
+        }
+    }
+}

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "wHt6Vf9vSScnF56TNeispWbFibuQrjb3qJOOCJXV1xI=",
+  "Hash": "4arSzfJfB6XDRmvpU5tP3d4A3S6Ci2Sj5R7KiqyAHaQ=",
   "Source": "GolfClubManagerWASM",
   "BasePath": "/",
   "Mode": "Root",
@@ -31,8 +31,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "WasmResource",
       "AssetTraitValue": "manifest",
-      "Fingerprint": "r55luonon2",
-      "Integrity": "X7vO72ApYZQHAABFwONk9TXzTIgGtYqsGiUYi5O90f0=",
+      "Fingerprint": "1e0fdwoyof",
+      "Integrity": "R6OBZTVDODWE/t32JF9qLXBKZtVOyV3lXitOBRU0TR4=",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "obj\\Debug\\net8.0\\blazor.boot.json"
@@ -220,8 +220,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "WasmResource",
       "AssetTraitValue": "symbol",
-      "Fingerprint": "eiuqocn3v0",
-      "Integrity": "9hQuZ3XYjC4oflKC1VVhbx2a1TaDe0XZrBdJF44cW70=",
+      "Fingerprint": "kmq3nlrtdm",
+      "Integrity": "jITotycye3ACHYrlC+h8rhTIQjxHM3z7TvRbCgHSylM=",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "obj\\Debug\\net8.0\\GolfClubManagerWASM.pdb"
@@ -241,8 +241,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "WasmResource",
       "AssetTraitValue": "runtime",
-      "Fingerprint": "05avxaonti",
-      "Integrity": "7FHrFsTOGZ6lbrlfRecdxl2oRCGiNO0gjLtWi4nA6AM=",
+      "Fingerprint": "o1feka1bpo",
+      "Integrity": "rA+qp05o9UIknGbY5hgVTx7d1sCwAMJBw8zVDvNS6gw=",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\webcil\\GolfClubManagerWASM.wasm"
@@ -5372,7 +5372,7 @@
       "OriginalItemSpec": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\bin\\Debug\\net8.0\\wwwroot\\_framework\\System.Runtime.Serialization.Xml.wasm"
     },
     {
-      "Identity": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\8edv5cptft-eiuqocn3v0.gz",
+      "Identity": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\8edv5cptft-kmq3nlrtdm.gz",
       "SourceId": "GolfClubManagerWASM",
       "SourceType": "Computed",
       "ContentRoot": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\",
@@ -5386,8 +5386,8 @@
       "RelatedAsset": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\bin\\Debug\\net8.0\\wwwroot\\_framework\\GolfClubManagerWASM.pdb",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "3zlemtabaa",
-      "Integrity": "vzCYfSmi1r0PPQjSttKAkc6Q2BdCjpFYmYpJMobUM2U=",
+      "Fingerprint": "r3qqmy1ycc",
+      "Integrity": "WcsvTKCng5aILswImb0ExdL5XXRk6RE/FtKxq3mlMYw=",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\bin\\Debug\\net8.0\\wwwroot\\_framework\\GolfClubManagerWASM.pdb"
@@ -7430,7 +7430,7 @@
       "OriginalItemSpec": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\bin\\Debug\\net8.0\\wwwroot\\_framework\\dotnet.runtime.js.map"
     },
     {
-      "Identity": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\p76n3xao3l-05avxaonti.gz",
+      "Identity": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\p76n3xao3l-o1feka1bpo.gz",
       "SourceId": "GolfClubManagerWASM",
       "SourceType": "Computed",
       "ContentRoot": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\",
@@ -7444,8 +7444,8 @@
       "RelatedAsset": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\bin\\Debug\\net8.0\\wwwroot\\_framework\\GolfClubManagerWASM.wasm",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "yg6nea9yb8",
-      "Integrity": "fjnHtvC2GeXgmWDRizEgV6yZSd0ox+2iKqZEXGHiRaI=",
+      "Fingerprint": "2oba5y1qp7",
+      "Integrity": "bimY5t61kKy1ym44mj778hB3Z8GPtHyYEb9wDES9mHo=",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\bin\\Debug\\net8.0\\wwwroot\\_framework\\GolfClubManagerWASM.wasm"
@@ -7829,7 +7829,7 @@
       "OriginalItemSpec": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\bin\\Debug\\net8.0\\wwwroot\\_framework\\System.Collections.Immutable.wasm"
     },
     {
-      "Identity": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\s5vppjjsr7-r55luonon2.gz",
+      "Identity": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\s5vppjjsr7-1e0fdwoyof.gz",
       "SourceId": "GolfClubManagerWASM",
       "SourceType": "Computed",
       "ContentRoot": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\",
@@ -7843,8 +7843,8 @@
       "RelatedAsset": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\bin\\Debug\\net8.0\\wwwroot\\_framework\\blazor.boot.json",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "t1b12p1xof",
-      "Integrity": "MYTXUoJzUCwNi6nufvHdjVOkotFl7Kn80IG/NaYs1e8=",
+      "Fingerprint": "ps9uclsdh4",
+      "Integrity": "GY2IqwrZIYlJALe4gfvJ74FVTVEnxUgO453jVIWSvLU=",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\bin\\Debug\\net8.0\\wwwroot\\_framework\\blazor.boot.json"
@@ -8836,11 +8836,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"X7vO72ApYZQHAABFwONk9TXzTIgGtYqsGiUYi5O90f0=\""
+          "Value": "\"R6OBZTVDODWE/t32JF9qLXBKZtVOyV3lXitOBRU0TR4=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 18 Feb 2025 18:41:51 GMT"
+          "Value": "Tue, 18 Feb 2025 19:29:35 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -8850,18 +8850,18 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-X7vO72ApYZQHAABFwONk9TXzTIgGtYqsGiUYi5O90f0="
+          "Value": "sha256-R6OBZTVDODWE/t32JF9qLXBKZtVOyV3lXitOBRU0TR4="
         }
       ]
     },
     {
       "Route": "_framework/blazor.boot.json",
-      "AssetFile": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\s5vppjjsr7-r55luonon2.gz",
+      "AssetFile": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\s5vppjjsr7-1e0fdwoyof.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000114982178"
+          "Quality": "0.000115021854"
         }
       ],
       "ResponseHeaders": [
@@ -8871,15 +8871,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "8696"
+          "Value": "8693"
         },
         {
           "Name": "ETag",
-          "Value": "\"MYTXUoJzUCwNi6nufvHdjVOkotFl7Kn80IG/NaYs1e8=\""
+          "Value": "\"GY2IqwrZIYlJALe4gfvJ74FVTVEnxUgO453jVIWSvLU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 18 Feb 2025 18:40:11 GMT"
+          "Value": "Tue, 18 Feb 2025 19:29:06 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -8899,19 +8899,19 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"X7vO72ApYZQHAABFwONk9TXzTIgGtYqsGiUYi5O90f0=\""
+          "Value": "W/\"R6OBZTVDODWE/t32JF9qLXBKZtVOyV3lXitOBRU0TR4=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-X7vO72ApYZQHAABFwONk9TXzTIgGtYqsGiUYi5O90f0="
+          "Value": "sha256-R6OBZTVDODWE/t32JF9qLXBKZtVOyV3lXitOBRU0TR4="
         }
       ]
     },
     {
       "Route": "_framework/blazor.boot.json.gz",
-      "AssetFile": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\s5vppjjsr7-r55luonon2.gz",
+      "AssetFile": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\s5vppjjsr7-1e0fdwoyof.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -8920,7 +8920,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "8696"
+          "Value": "8693"
         },
         {
           "Name": "Content-Type",
@@ -8928,11 +8928,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"MYTXUoJzUCwNi6nufvHdjVOkotFl7Kn80IG/NaYs1e8=\""
+          "Value": "\"GY2IqwrZIYlJALe4gfvJ74FVTVEnxUgO453jVIWSvLU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 18 Feb 2025 18:40:11 GMT"
+          "Value": "Tue, 18 Feb 2025 19:29:06 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -8950,7 +8950,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-MYTXUoJzUCwNi6nufvHdjVOkotFl7Kn80IG/NaYs1e8="
+          "Value": "sha256-GY2IqwrZIYlJALe4gfvJ74FVTVEnxUgO453jVIWSvLU="
         }
       ]
     },
@@ -10061,7 +10061,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "27284"
+          "Value": "30564"
         },
         {
           "Name": "Content-Type",
@@ -10069,11 +10069,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"9hQuZ3XYjC4oflKC1VVhbx2a1TaDe0XZrBdJF44cW70=\""
+          "Value": "\"jITotycye3ACHYrlC+h8rhTIQjxHM3z7TvRbCgHSylM=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 18 Feb 2025 18:40:10 GMT"
+          "Value": "Tue, 18 Feb 2025 19:29:34 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -10083,18 +10083,18 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-9hQuZ3XYjC4oflKC1VVhbx2a1TaDe0XZrBdJF44cW70="
+          "Value": "sha256-jITotycye3ACHYrlC+h8rhTIQjxHM3z7TvRbCgHSylM="
         }
       ]
     },
     {
       "Route": "_framework/GolfClubManagerWASM.pdb",
-      "AssetFile": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\8edv5cptft-eiuqocn3v0.gz",
+      "AssetFile": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\8edv5cptft-kmq3nlrtdm.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000049746294"
+          "Quality": "0.000044456299"
         }
       ],
       "ResponseHeaders": [
@@ -10104,15 +10104,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "20101"
+          "Value": "22493"
         },
         {
           "Name": "ETag",
-          "Value": "\"vzCYfSmi1r0PPQjSttKAkc6Q2BdCjpFYmYpJMobUM2U=\""
+          "Value": "\"WcsvTKCng5aILswImb0ExdL5XXRk6RE/FtKxq3mlMYw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 18 Feb 2025 18:40:10 GMT"
+          "Value": "Tue, 18 Feb 2025 19:29:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -10132,19 +10132,19 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"9hQuZ3XYjC4oflKC1VVhbx2a1TaDe0XZrBdJF44cW70=\""
+          "Value": "W/\"jITotycye3ACHYrlC+h8rhTIQjxHM3z7TvRbCgHSylM=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-9hQuZ3XYjC4oflKC1VVhbx2a1TaDe0XZrBdJF44cW70="
+          "Value": "sha256-jITotycye3ACHYrlC+h8rhTIQjxHM3z7TvRbCgHSylM="
         }
       ]
     },
     {
       "Route": "_framework/GolfClubManagerWASM.pdb.gz",
-      "AssetFile": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\8edv5cptft-eiuqocn3v0.gz",
+      "AssetFile": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\8edv5cptft-kmq3nlrtdm.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -10153,7 +10153,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "20101"
+          "Value": "22493"
         },
         {
           "Name": "Content-Type",
@@ -10161,11 +10161,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"vzCYfSmi1r0PPQjSttKAkc6Q2BdCjpFYmYpJMobUM2U=\""
+          "Value": "\"WcsvTKCng5aILswImb0ExdL5XXRk6RE/FtKxq3mlMYw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 18 Feb 2025 18:40:10 GMT"
+          "Value": "Tue, 18 Feb 2025 19:29:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -10183,7 +10183,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-vzCYfSmi1r0PPQjSttKAkc6Q2BdCjpFYmYpJMobUM2U="
+          "Value": "sha256-WcsvTKCng5aILswImb0ExdL5XXRk6RE/FtKxq3mlMYw="
         }
       ]
     },
@@ -10198,7 +10198,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "22805"
+          "Value": "30485"
         },
         {
           "Name": "Content-Type",
@@ -10206,11 +10206,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"7FHrFsTOGZ6lbrlfRecdxl2oRCGiNO0gjLtWi4nA6AM=\""
+          "Value": "\"rA+qp05o9UIknGbY5hgVTx7d1sCwAMJBw8zVDvNS6gw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 18 Feb 2025 18:40:10 GMT"
+          "Value": "Tue, 18 Feb 2025 19:29:34 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -10220,18 +10220,18 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-7FHrFsTOGZ6lbrlfRecdxl2oRCGiNO0gjLtWi4nA6AM="
+          "Value": "sha256-rA+qp05o9UIknGbY5hgVTx7d1sCwAMJBw8zVDvNS6gw="
         }
       ]
     },
     {
       "Route": "_framework/GolfClubManagerWASM.wasm",
-      "AssetFile": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\p76n3xao3l-05avxaonti.gz",
+      "AssetFile": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\p76n3xao3l-o1feka1bpo.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000107319167"
+          "Quality": "0.000080153895"
         }
       ],
       "ResponseHeaders": [
@@ -10241,15 +10241,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "9317"
+          "Value": "12475"
         },
         {
           "Name": "ETag",
-          "Value": "\"fjnHtvC2GeXgmWDRizEgV6yZSd0ox+2iKqZEXGHiRaI=\""
+          "Value": "\"bimY5t61kKy1ym44mj778hB3Z8GPtHyYEb9wDES9mHo=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 18 Feb 2025 18:40:10 GMT"
+          "Value": "Tue, 18 Feb 2025 19:29:06 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -10269,19 +10269,19 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"7FHrFsTOGZ6lbrlfRecdxl2oRCGiNO0gjLtWi4nA6AM=\""
+          "Value": "W/\"rA+qp05o9UIknGbY5hgVTx7d1sCwAMJBw8zVDvNS6gw=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-7FHrFsTOGZ6lbrlfRecdxl2oRCGiNO0gjLtWi4nA6AM="
+          "Value": "sha256-rA+qp05o9UIknGbY5hgVTx7d1sCwAMJBw8zVDvNS6gw="
         }
       ]
     },
     {
       "Route": "_framework/GolfClubManagerWASM.wasm.gz",
-      "AssetFile": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\p76n3xao3l-05avxaonti.gz",
+      "AssetFile": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\obj\\Debug\\net8.0\\compressed\\p76n3xao3l-o1feka1bpo.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -10290,7 +10290,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "9317"
+          "Value": "12475"
         },
         {
           "Name": "Content-Type",
@@ -10298,11 +10298,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"fjnHtvC2GeXgmWDRizEgV6yZSd0ox+2iKqZEXGHiRaI=\""
+          "Value": "\"bimY5t61kKy1ym44mj778hB3Z8GPtHyYEb9wDES9mHo=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 18 Feb 2025 18:40:10 GMT"
+          "Value": "Tue, 18 Feb 2025 19:29:06 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -10320,7 +10320,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-fjnHtvC2GeXgmWDRizEgV6yZSd0ox+2iKqZEXGHiRaI="
+          "Value": "sha256-bimY5t61kKy1ym44mj778hB3Z8GPtHyYEb9wDES9mHo="
         }
       ]
     },

@@ -1034,6 +1034,6 @@ C:\Users\gille\RiderProjects\GolfClubManager\GolfClubManagerWASM\obj\Debug\net8.
 C:\Users\gille\RiderProjects\GolfClubManager\GolfClubManagerWASM\obj\Debug\net8.0\GolfClubManagerWASM.pdb
 C:\Users\gille\RiderProjects\GolfClubManager\GolfClubManagerWASM\obj\Debug\net8.0\ref\GolfClubManagerWASM.dll
 C:\Users\gille\RiderProjects\GolfClubManager\GolfClubManagerWASM\obj\Debug\net8.0\GolfClubManagerWASM.sourcelink.json
-C:\Users\gille\RiderProjects\GolfClubManager\GolfClubManagerWASM\obj\Debug\net8.0\compressed\p76n3xao3l-05avxaonti.gz
-C:\Users\gille\RiderProjects\GolfClubManager\GolfClubManagerWASM\obj\Debug\net8.0\compressed\8edv5cptft-eiuqocn3v0.gz
-C:\Users\gille\RiderProjects\GolfClubManager\GolfClubManagerWASM\obj\Debug\net8.0\compressed\s5vppjjsr7-r55luonon2.gz
+C:\Users\gille\RiderProjects\GolfClubManager\GolfClubManagerWASM\obj\Debug\net8.0\compressed\p76n3xao3l-o1feka1bpo.gz
+C:\Users\gille\RiderProjects\GolfClubManager\GolfClubManagerWASM\obj\Debug\net8.0\compressed\8edv5cptft-kmq3nlrtdm.gz
+C:\Users\gille\RiderProjects\GolfClubManager\GolfClubManagerWASM\obj\Debug\net8.0\compressed\s5vppjjsr7-1e0fdwoyof.gz
