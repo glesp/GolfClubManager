@@ -1,0 +1,9 @@
+@using GolfClubManagerWASM.Models
+@inject HttpClient Http
+@code {
+    private List<Member> members;
+    protected override async Task OnInitializedAsync()
+    {
+        members = await Http.GetFromJsonAsync<List<Member>>("https://localhost:5001/api/members");
+    }
+}

@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GolfClubManagerAPI", "GolfClubManagerAPI\GolfClubManagerAPI.csproj", "{45B99F25-57E8-4E46-96C4-34F6A7195A43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GolfClubManagerWASM", "GolfClubManagerWASM\GolfClubManagerWASM.csproj", "{7DCB37BF-F3D8-4C96-9561-061F3D477C20}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45B99F25-57E8-4E46-96C4-34F6A7195A43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45B99F25-57E8-4E46-96C4-34F6A7195A43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45B99F25-57E8-4E46-96C4-34F6A7195A43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45B99F25-57E8-4E46-96C4-34F6A7195A43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DCB37BF-F3D8-4C96-9561-061F3D477C20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DCB37BF-F3D8-4C96-9561-061F3D477C20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DCB37BF-F3D8-4C96-9561-061F3D477C20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DCB37BF-F3D8-4C96-9561-061F3D477C20}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
