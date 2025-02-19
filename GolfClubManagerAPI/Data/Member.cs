@@ -1,15 +1,17 @@
-using GolfClubManagerAPI.Models;
 
-public class Member
+namespace GolfClubManagerAPI.Data
 {
-    public int Id { get; set; }
+    public class Member
+    {
+        public int Id { get; set; }
 
-    public int MembershipNumber { get; set; }  // Integer for auto-increment, no identity attribute
+        public int MembershipNumber { get; set; } // Integer for auto-increment, no identity attribute
 
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string Gender { get; set; }
-    public int Handicap { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Gender { get; set; }
+        public int Handicap { get; set; }
 
-    public List<TeeTimeBooking> Bookings { get; set; } = new();
+        public List<TeeTimeBooking> Bookings { get; set; } = new();
+    }
 }

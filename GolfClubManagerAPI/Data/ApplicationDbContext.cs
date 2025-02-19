@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using GolfClubManagerAPI.Models;
 
 namespace GolfClubManagerAPI.Data
 {

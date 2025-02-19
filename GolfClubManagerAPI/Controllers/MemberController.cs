@@ -1,5 +1,6 @@
 // MemberController.cs
-using GolfClubManagerAPI.Models;
+
+using GolfClubManagerAPI.Data;
 using GolfClubManagerAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 

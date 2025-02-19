@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using GolfClubManagerAPI.Data;
-using GolfClubManagerAPI.Models;
 using GolfClubManagerAPI.DTOs;
 
 public class BookingService

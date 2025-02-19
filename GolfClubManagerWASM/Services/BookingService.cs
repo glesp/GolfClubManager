@@ -1,55 +1,31 @@
+// BookingService.cs (Frontend Service for API Calls)
 using System.Net.Http.Json;
-using GolfClubManagerWASM.Models;
+using GolfClubManagerWASM.DTOs;
 
 namespace GolfClubManagerWASM.Services;
 
 public class BookingService
 {
     private readonly HttpClient _httpClient;
-    private const string ApiBaseUrl = "http://localhost:5080/api/bookings"; // Ensure this is correct
 
     public BookingService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
 
-    /// <summary>
-    /// Fetch all bookings from the API
-    /// </summary>
-    public async Task<List<TeeTimeBooking>> GetBookingsAsync()
+    public async Task<List<TeeTimeSlotDTO>> GetAvailableSlotsAsync(DateTime date)
     {
-        return await _httpClient.GetFromJsonAsync<List<TeeTimeBooking>>(ApiBaseUrl) ?? new List<TeeTimeBooking>();
+        return await _httpClient.GetFromJsonAsync<List<TeeTimeSlotDTO>>($"api/TeeTime/GetTeeTimeSlots/{date:yyyy-MM-dd}") ?? new List<TeeTimeSlotDTO>();
     }
 
-    /// <summary>
-    /// Fetch available tee times for booking (next available slots)
-    /// </summary>
-    public async Task<List<DateTime>> GetAvailableTeeTimesAsync()
+    public async Task<List<BookingDisplayDTO>> GetBookingsForDateAsync(DateTime date)
     {
-        return await _httpClient.GetFromJsonAsync<List<DateTime>>($"{ApiBaseUrl}/available") ?? new List<DateTime>();
+        return await _httpClient.GetFromJsonAsync<List<BookingDisplayDTO>>($"api/Booking/bookingsForDate/{date:yyyy-MM-dd}") ?? new List<BookingDisplayDTO>();
     }
 
-    /// <summary>
-    /// Attempt to book a tee time for a member
-    /// </summary>
-    public async Task<string> BookTeeTimeAsync(TeeTimeBooking booking)
+    public async Task<bool> BookTeeTimeAsync(BookingDTO bookingDTO)
     {
-        var response = await _httpClient.PostAsJsonAsync(ApiBaseUrl, booking);
-
-        if (response.IsSuccessStatusCode)
-            return "Success";
-
-        var errorMessage = await response.Content.ReadAsStringAsync();
-        return errorMessage;
-    }
-
-
-    /// <summary>
-    /// Delete a booking (cancel)
-    /// </summary>
-    public async Task<bool> CancelBookingAsync(int bookingId)
-    {
-        var response = await _httpClient.DeleteAsync($"{ApiBaseUrl}/{bookingId}");
+        var response = await _httpClient.PostAsJsonAsync("api/Booking", bookingDTO);
         return response.IsSuccessStatusCode;
     }
 }

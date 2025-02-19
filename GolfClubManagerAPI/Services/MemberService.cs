@@ -1,5 +1,4 @@
 // MemberService.cs
-using GolfClubManagerAPI.Models;
 using GolfClubManagerAPI.Data;
 using Microsoft.EntityFrameworkCore;
 

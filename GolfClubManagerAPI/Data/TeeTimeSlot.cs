@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using GolfClubManagerAPI.Data;
 
-namespace GolfClubManagerAPI.Models
+namespace GolfClubManagerAPI.Data
 {
     public class TeeTimeSlot
     {
