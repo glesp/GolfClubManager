@@ -17,6 +17,17 @@ namespace GolfClubManagerAPI.Services
         // Add a new member
         public async Task<Member> AddMemberAsync(Member member)
         {
+            
+            // Get the last MembershipNumber (if any)
+            var lastMember = await _context.Members
+                .OrderByDescending(m => m.MembershipNumber)
+                .FirstOrDefaultAsync();
+
+            // Generate the next MembershipNumber (if there is a last member, increment the MembershipNumber)
+            var newMembershipNumber = lastMember != null ? lastMember.MembershipNumber + 1 : 1;
+
+            member.MembershipNumber = newMembershipNumber;
+
             // You can add validation here if necessary
             _context.Members.Add(member);
             await _context.SaveChangesAsync();

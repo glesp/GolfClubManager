@@ -22,35 +22,6 @@ namespace GolfClubManagerAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GolfClubManagerAPI.Models.Member", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Handicap")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MembershipNumber")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Members");
-                });
-
             modelBuilder.Entity("GolfClubManagerAPI.Models.TeeTimeBooking", b =>
                 {
                     b.Property<int>("Id")
@@ -91,9 +62,40 @@ namespace GolfClubManagerAPI.Migrations
                     b.ToTable("TeeTimeSlots");
                 });
 
+            modelBuilder.Entity("Member", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Handicap")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MembershipNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Members");
+                });
+
             modelBuilder.Entity("GolfClubManagerAPI.Models.TeeTimeBooking", b =>
                 {
-                    b.HasOne("GolfClubManagerAPI.Models.Member", "Member")
+                    b.HasOne("Member", "Member")
                         .WithMany("Bookings")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -110,12 +112,12 @@ namespace GolfClubManagerAPI.Migrations
                     b.Navigation("TeeTimeSlot");
                 });
 
-            modelBuilder.Entity("GolfClubManagerAPI.Models.Member", b =>
+            modelBuilder.Entity("GolfClubManagerAPI.Models.TeeTimeSlot", b =>
                 {
                     b.Navigation("Bookings");
                 });
 
-            modelBuilder.Entity("GolfClubManagerAPI.Models.TeeTimeSlot", b =>
+            modelBuilder.Entity("Member", b =>
                 {
                     b.Navigation("Bookings");
                 });
