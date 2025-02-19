@@ -11,34 +11,30 @@ public class BookingService
         _context = context;
     }
 
-    public async Task<TeeTimeBooking> CreateBookingAsync(BookingDTO bookingDTO)
+    public async Task<List<TeeTimeBooking>> CreateBookingAsync(BookingDTO bookingDTO)
     {
-        var hasBookedToday = await _context.TeeTimeBookings
-            .AnyAsync(b => b.MemberId == bookingDTO.MemberId &&
-                           b.TeeTimeSlot.BookingTime.Date == _context.TeeTimeSlots
-                               .Where(t => t.Id == bookingDTO.TeeTimeSlotId)
-                               .Select(t => t.BookingTime.Date)
-                               .FirstOrDefault());
+        var teeTimeSlot = await _context.TeeTimeSlots.FindAsync(bookingDTO.TeeTimeSlotId);
+        if (teeTimeSlot == null) throw new InvalidOperationException("Tee Time Slot not found.");
 
-        if (hasBookedToday)
-            throw new InvalidOperationException("You can only book one slot per day.");
-
-        var bookingsCount = await _context.TeeTimeBookings
-            .CountAsync(b => b.TeeTimeSlotId == bookingDTO.TeeTimeSlotId);
-
-        if (bookingsCount >= 4)
-            throw new InvalidOperationException("This slot is already full. Max 4 members per slot.");
-
-        var booking = new TeeTimeBooking
+        var newBookings = new List<TeeTimeBooking>();
+    
+        foreach (var memberId in bookingDTO.MemberIds)
         {
-            MemberId = bookingDTO.MemberId,
-            TeeTimeSlotId = bookingDTO.TeeTimeSlotId
-        };
+            newBookings.Add(new TeeTimeBooking { TeeTimeSlotId = bookingDTO.TeeTimeSlotId, MemberId = memberId });
+        }
+    
+        foreach (var player in bookingDTO.NewPlayers ?? new List<PlayerDTO>())
+        {
+            var member = new Member { Name = $"{player.FirstName} {player.LastName}" };
+            _context.Members.Add(member);
+            await _context.SaveChangesAsync();
 
-        _context.TeeTimeBookings.Add(booking);
+            newBookings.Add(new TeeTimeBooking { TeeTimeSlotId = bookingDTO.TeeTimeSlotId, MemberId = member.Id });
+        }
+
+        _context.TeeTimeBookings.AddRange(newBookings);
         await _context.SaveChangesAsync();
-
-        return booking;
+        return newBookings;
     }
 
     public async Task<List<TeeTimeSlotDTO>> GetAvailableSlotsForDate(DateTime date)

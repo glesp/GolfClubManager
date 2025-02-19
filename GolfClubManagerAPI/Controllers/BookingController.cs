@@ -18,19 +18,15 @@ namespace GolfClubManagerAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TeeTimeBooking>> BookTeeTime([FromBody] BookingDTO bookingDTO)
+        public async Task<ActionResult> BookTeeTime([FromBody] BookingDTO bookingDTO)
         {
-            try
-            {
-                var createdBooking = await _bookingService.CreateBookingAsync(bookingDTO);
-                return CreatedAtAction(nameof(GetBookingsForDate),
-                    new { date = createdBooking.TeeTimeSlot.BookingTime.Date }, createdBooking);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            if (bookingDTO.MemberIds.Count == 0 && (bookingDTO.NewPlayers == null || bookingDTO.NewPlayers.Count == 0))
+                return BadRequest("At least one player is required.");
+
+            var createdBookings = await _bookingService.CreateBookingAsync(bookingDTO);
+            return Ok(createdBookings);
         }
+
 
         [HttpGet("bookingsForDate/{date}")]
         public async Task<ActionResult<IEnumerable<BookingDisplayDTO>>> GetBookingsForDate(DateTime date)

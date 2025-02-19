@@ -28,4 +28,20 @@ public class BookingService
         var response = await _httpClient.PostAsJsonAsync("api/Booking", bookingDTO);
         return response.IsSuccessStatusCode;
     }
+
+    public async Task<List<MemberDTO>> GetAllMembersAsync()
+    {
+        return await _httpClient.GetFromJsonAsync<List<MemberDTO>>("api/Member");
+    }
+    
+    public async Task<int> AddMemberAsync(PlayerDTO newPlayer)
+    {
+        var response = await _httpClient.PostAsJsonAsync("api/Member", newPlayer);
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<int>(); // Returns new member ID
+        }
+        return 0;
+    }
+
 }

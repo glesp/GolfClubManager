@@ -1,5 +1,3 @@
-// Bookings.razor (Frontend UI for Booking Tee Times)
-
 @page "/bookings"
 @using GolfClubManagerWASM.DTOs
 @using GolfClubManagerWASM.Services
@@ -12,24 +10,37 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <div class="form-group">
-        <label for="FirstName">First Name</label>
-        <InputText id="FirstName" class="form-control" @bind-Value="bookingFormModel.FirstName" />
-    </div>
-
-    <div class="form-group">
-        <label for="LastName">Last Name</label>
-        <InputText id="LastName" class="form-control" @bind-Value="bookingFormModel.LastName" />
-    </div>
-
-    <div class="form-group">
-        <label for="TeeTimeSlotId">Select a Time Slot</label>
-        <InputSelect id="TeeTimeSlotId" class="form-control" @bind-Value="bookingFormModel.TeeTimeSlotId">
+    <div>
+        <label>Select Tee Time:</label>
+        <select @bind="bookingFormModel.TeeTimeSlotId">
             @foreach (var slot in availableSlots)
             {
                 <option value="@slot.Id">@slot.BookingTime.ToString("yyyy-MM-dd HH:mm")</option>
             }
-        </InputSelect>
+        </select>
+    </div>
+
+    <div>
+        <label>Enter Players:</label>
+        @for (int i = 0; i < 4; i++)
+        {
+            <div>
+                <label>Player @(i + 1)</label>
+                <select @bind="bookingFormModel.MemberIds[i]">
+                    <option value="0">New Member</option>
+                    @foreach (var member in availableMembers)
+                    {
+                        <option value="@member.Id">@member.Name</option>
+                    }
+                </select>
+
+                @if (bookingFormModel.MemberIds[i] == 0)
+                {
+                    <input type="text" @bind="newPlayers[i].FirstName" placeholder="First Name" />
+                    <input type="text" @bind="newPlayers[i].LastName" placeholder="Last Name" />
+                }
+            </div>
+        }
     </div>
 
     <button type="submit" class="btn btn-primary">Book Tee Time</button>
@@ -39,43 +50,55 @@
 
 <table class="table">
     <thead>
-        <tr>
-            <th>Booking Time</th>
-            <th>Member Name</th>
-            <th>Slot</th>
-        </tr>
+    <tr>
+        <th>Booking Time</th>
+        <th>Member Name</th>
+        <th>Slot</th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var booking in currentBookings)
-        {
-            <tr>
-                <td>@booking.BookingTime.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@booking.MemberName</td>
-                <td>@booking.TeeTimeSlotId</td>
-            </tr>
-        }
+    @foreach (var booking in currentBookings)
+    {
+        <tr>
+            <td>@booking.BookingTime.ToString("yyyy-MM-dd HH:mm")</td>
+            <td>@booking.MemberName</td>
+            <td>@booking.TeeTimeSlotId</td>
+        </tr>
+    }
     </tbody>
 </table>
 
 @code {
-    private BookingDTO bookingFormModel = new BookingDTO();
+    private BookingDTO bookingFormModel = new BookingDTO { MemberIds = new List<int> { 0, 0, 0, 0 } };
+    private List<PlayerDTO> newPlayers = new List<PlayerDTO> { new PlayerDTO(), new PlayerDTO(), new PlayerDTO(), new PlayerDTO() };
     private List<TeeTimeSlotDTO> availableSlots = new List<TeeTimeSlotDTO>();
+    private List<MemberDTO> availableMembers = new List<MemberDTO>();
     private List<BookingDisplayDTO> currentBookings = new List<BookingDisplayDTO>();
 
     protected override async Task OnInitializedAsync()
     {
-        var selectedDate = DateTime.Now;
-        availableSlots = await BookingService.GetAvailableSlotsAsync(selectedDate);
-        currentBookings = await BookingService.GetBookingsForDateAsync(selectedDate);
+        availableMembers = await BookingService.GetAllMembersAsync() ?? new List<MemberDTO>();
+        availableSlots = await BookingService.GetAvailableSlotsAsync(DateTime.Now) ?? new List<TeeTimeSlotDTO>();
+        currentBookings = await BookingService.GetBookingsForDateAsync(DateTime.Now) ?? new List<BookingDisplayDTO>();
     }
 
     private async Task BookTeeTime()
     {
+        for (int i = 0; i < bookingFormModel.MemberIds.Count; i++)
+        {
+            if (bookingFormModel.MemberIds[i] == 0 && !string.IsNullOrWhiteSpace(newPlayers[i].FirstName))
+            {
+                int newMemberId = await BookingService.AddMemberAsync(newPlayers[i]);
+                bookingFormModel.MemberIds[i] = newMemberId;
+            }
+        }
+
         var success = await BookingService.BookTeeTimeAsync(bookingFormModel);
         if (success)
         {
             currentBookings = await BookingService.GetBookingsForDateAsync(DateTime.Now);
-            bookingFormModel = new BookingDTO(); // Reset form after success
+            bookingFormModel = new BookingDTO { MemberIds = new List<int> { 0, 0, 0, 0 } };
+            newPlayers = new List<PlayerDTO> { new PlayerDTO(), new PlayerDTO(), new PlayerDTO(), new PlayerDTO() };
         }
         else
         {

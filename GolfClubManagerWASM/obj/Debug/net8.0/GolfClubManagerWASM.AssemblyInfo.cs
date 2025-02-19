@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GolfClubManagerWASM")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+55dc78b68e746323d616f41712d477b5309a99d2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+22ece0ef9d16998225b168743398be4bf60059e0")]
 [assembly: System.Reflection.AssemblyProductAttribute("GolfClubManagerWASM")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GolfClubManagerWASM")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
