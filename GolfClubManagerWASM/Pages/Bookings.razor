@@ -21,26 +21,26 @@
     </div>
 
     <div>
-        <label>Enter Players:</label>
+        <label>Select Players:</label>
         @for (int i = 0; i < 4; i++)
         {
+            int capturedIndex = i; // Ensure index is fixed inside this iteration
+
             <div>
-                <label>Player @(i + 1)</label>
-                <select @bind="bookingFormModel.MemberIds[i]">
-                    <option value="0">New Member</option>
+                <label>Player @(capturedIndex + 1)</label>
+                <select class="form-control" @onchange="(e) => HandleMemberChange(capturedIndex, e)">
+                    <option value="0">Select Member</option>
                     @foreach (var member in availableMembers)
                     {
                         <option value="@member.Id">@member.Name</option>
                     }
                 </select>
-
-                @if (bookingFormModel.MemberIds[i] == 0)
-                {
-                    <input type="text" @bind="newPlayers[i].FirstName" placeholder="First Name" />
-                    <input type="text" @bind="newPlayers[i].LastName" placeholder="Last Name" />
-                }
             </div>
         }
+
+
+
+
     </div>
 
     <button type="submit" class="btn btn-primary">Book Tee Time</button>
@@ -50,59 +50,114 @@
 
 <table class="table">
     <thead>
-    <tr>
-        <th>Booking Time</th>
-        <th>Member Name</th>
-        <th>Slot</th>
-    </tr>
+        <tr>
+            <th>Booking Time</th>
+            <th>Member Name</th>
+            <th>Slot</th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var booking in currentBookings)
-    {
-        <tr>
-            <td>@booking.BookingTime.ToString("yyyy-MM-dd HH:mm")</td>
-            <td>@booking.MemberName</td>
-            <td>@booking.TeeTimeSlotId</td>
-        </tr>
-    }
+        @foreach (var booking in currentBookings)
+        {
+            <tr>
+                <td>@booking.BookingTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@booking.MemberName</td>
+                <td>@booking.TeeTimeSlotId</td>
+            </tr>
+        }
     </tbody>
 </table>
 
 @code {
     private BookingDTO bookingFormModel = new BookingDTO { MemberIds = new List<int> { 0, 0, 0, 0 } };
-    private List<PlayerDTO> newPlayers = new List<PlayerDTO> { new PlayerDTO(), new PlayerDTO(), new PlayerDTO(), new PlayerDTO() };
-    private List<TeeTimeSlotDTO> availableSlots = new List<TeeTimeSlotDTO>();
-    private List<MemberDTO> availableMembers = new List<MemberDTO>();
-    private List<BookingDisplayDTO> currentBookings = new List<BookingDisplayDTO>();
+    private List<TeeTimeSlotDTO> availableSlots = new();
+    private List<MemberDTO> availableMembers = new();
+    private List<BookingDisplayDTO> currentBookings = new();
 
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine("🔹 Initializing Bookings...");
+
         availableMembers = await BookingService.GetAllMembersAsync() ?? new List<MemberDTO>();
         availableSlots = await BookingService.GetAvailableSlotsAsync(DateTime.Now) ?? new List<TeeTimeSlotDTO>();
         currentBookings = await BookingService.GetBookingsForDateAsync(DateTime.Now) ?? new List<BookingDisplayDTO>();
+
+        Console.WriteLine($"✅ Available members count: {availableMembers.Count}");
+        Console.WriteLine($"✅ Available slots count: {availableSlots.Count}");
+        Console.WriteLine($"✅ Current bookings count: {currentBookings.Count}");
+        Console.WriteLine($"🔹 MemberIds before adjustment: {string.Join(", ", bookingFormModel.MemberIds)}");
+
+        // Ensure MemberIds always has 4 elements
+        while (bookingFormModel.MemberIds.Count < 4)
+        {
+            bookingFormModel.MemberIds.Add(0);
+        }
+        Console.WriteLine($"✅ MemberIds initialized: {string.Join(", ", bookingFormModel.MemberIds)}");
+
+        StateHasChanged();
     }
 
-    private async Task BookTeeTime()
+    private void HandleMemberChange(int index, ChangeEventArgs e)
     {
-        for (int i = 0; i < bookingFormModel.MemberIds.Count; i++)
+        if (index < 0 || index >= 4)  // Ensures index is always between 0 and 3
         {
-            if (bookingFormModel.MemberIds[i] == 0 && !string.IsNullOrWhiteSpace(newPlayers[i].FirstName))
-            {
-                int newMemberId = await BookingService.AddMemberAsync(newPlayers[i]);
-                bookingFormModel.MemberIds[i] = newMemberId;
-            }
+            Console.WriteLine($"❌ ERROR: Invalid index {index}, must be 0-3.");
+            return;
         }
 
-        var success = await BookingService.BookTeeTimeAsync(bookingFormModel);
-        if (success)
+        if (bookingFormModel.MemberIds.Count < 4) // Refill if list is unexpectedly too short
         {
-            currentBookings = await BookingService.GetBookingsForDateAsync(DateTime.Now);
-            bookingFormModel = new BookingDTO { MemberIds = new List<int> { 0, 0, 0, 0 } };
-            newPlayers = new List<PlayerDTO> { new PlayerDTO(), new PlayerDTO(), new PlayerDTO(), new PlayerDTO() };
+            while (bookingFormModel.MemberIds.Count < 4)
+            {
+                bookingFormModel.MemberIds.Add(0);
+            }
+            Console.WriteLine($"🔄 Adjusted MemberIds: {string.Join(", ", bookingFormModel.MemberIds)}");
+        }
+
+        if (int.TryParse(e.Value.ToString(), out int selectedMemberId))
+        {
+            Console.WriteLine($"✅ Changing MemberIds[{index}] to {selectedMemberId}");
+            bookingFormModel.MemberIds[index] = selectedMemberId;
         }
         else
         {
-            Console.WriteLine("Booking failed. Please try again.");
+            Console.WriteLine($"❌ ERROR: Invalid selection value {e.Value}");
+        }
+    }
+
+
+
+
+
+
+    private async Task BookTeeTime()
+    {
+        Console.WriteLine($"📌 Attempting to book tee time for members: {string.Join(", ", bookingFormModel.MemberIds)}");
+        
+        // Check for invalid indices before looping
+        for (int i = 0; i < 4; i++)  
+        {
+            if (i >= bookingFormModel.MemberIds.Count)
+            {
+                Console.WriteLine($"❌ ERROR: Index {i} is out of range! Current MemberIds: {string.Join(", ", bookingFormModel.MemberIds)}");
+                return;  // Prevents the function from proceeding with a broken state
+            }
+            else
+            {
+                Console.WriteLine($"✅ Accessing MemberIds[{i}] = {bookingFormModel.MemberIds[i]}");
+            }
+        }
+        
+        var success = await BookingService.BookTeeTimeAsync(bookingFormModel);
+        if (success)
+        {
+            Console.WriteLine("✅ Booking successful!");
+            currentBookings = await BookingService.GetBookingsForDateAsync(DateTime.Now);
+            bookingFormModel = new BookingDTO { MemberIds = new List<int> { 0, 0, 0, 0 } };
+        }
+        else
+        {
+            Console.WriteLine("❌ Booking failed. Please try again.");
         }
     }
 }
