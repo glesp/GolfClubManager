@@ -13,8 +13,14 @@ public class BookingService
 
     public async Task<List<TeeTimeBooking>> CreateBookingAsync(BookingDTO bookingDTO)
     {
+        Console.WriteLine($"📌 Debug: Checking TeeTimeSlotId = {bookingDTO.TeeTimeSlotId}");
+
         var teeTimeSlot = await _context.TeeTimeSlots.FindAsync(bookingDTO.TeeTimeSlotId);
-        if (teeTimeSlot == null) throw new InvalidOperationException("Tee Time Slot not found.");
+        if (teeTimeSlot == null)
+        {
+            Console.WriteLine($"❌ ERROR: Tee Time Slot with ID {bookingDTO.TeeTimeSlotId} not found in DB.");
+            throw new InvalidOperationException($"Tee Time Slot {bookingDTO.TeeTimeSlotId} not found.");
+        }
 
         var newBookings = new List<TeeTimeBooking>();
     
@@ -22,20 +28,19 @@ public class BookingService
         {
             newBookings.Add(new TeeTimeBooking { TeeTimeSlotId = bookingDTO.TeeTimeSlotId, MemberId = memberId });
         }
-    
-        foreach (var player in bookingDTO.NewPlayers ?? new List<PlayerDTO>())
+        
+        // 🔥 FIX: Disable tracking before saving
+        foreach (var entry in _context.ChangeTracker.Entries())
         {
-            var member = new Member { Name = $"{player.FirstName} {player.LastName}" };
-            _context.Members.Add(member);
-            await _context.SaveChangesAsync();
-
-            newBookings.Add(new TeeTimeBooking { TeeTimeSlotId = bookingDTO.TeeTimeSlotId, MemberId = member.Id });
+            entry.State = EntityState.Detached;
         }
+
 
         _context.TeeTimeBookings.AddRange(newBookings);
         await _context.SaveChangesAsync();
         return newBookings;
     }
+
 
     public async Task<List<TeeTimeSlotDTO>> GetAvailableSlotsForDate(DateTime date)
     {

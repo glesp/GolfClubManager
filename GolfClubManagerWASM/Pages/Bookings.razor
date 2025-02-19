@@ -13,6 +13,7 @@
     <div>
         <label>Select Tee Time:</label>
         <select @bind="bookingFormModel.TeeTimeSlotId">
+            <option value="0" disabled selected>-- Select a Tee Time --</option>
             @foreach (var slot in availableSlots)
             {
                 <option value="@slot.Id">@slot.BookingTime.ToString("yyyy-MM-dd HH:mm")</option>
