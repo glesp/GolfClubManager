@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GolfClubManagerAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250218200412_AddTeeTimeTables")]
-    partial class AddTeeTimeTables
+    [Migration("20250219144034_AddMembershipNumbers")]
+    partial class AddMembershipNumbers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,11 @@ namespace GolfClubManagerAPI.Migrations
 
                     b.Property<int>("Handicap")
                         .HasColumnType("int");
+
+                    b.Property<string>("MembershipNumber")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

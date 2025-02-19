@@ -1,47 +1,90 @@
 @page "/members"
-
-@using GolfClubManagerWASM.Models
+@using GolfClubManagerWASM.DTOs
 @using GolfClubManagerWASM.Models
 @inject HttpClient Http
 
-<h3>Members List</h3>
+<h3>Members</h3>
 
-@if (members == null)
+<!-- Form for adding new member -->
+<EditForm Model="newMember" OnValidSubmit="AddMember">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <InputText id="Name" class="form-control" @bind-Value="newMember.Name" />
+    </div>
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <InputText id="Email" class="form-control" @bind-Value="newMember.Email" />
+    </div>
+    <div class="form-group">
+        <label for="Handicap">Handicap</label>
+        <InputNumber id="Handicap" class="form-control" @bind-Value="newMember.Handicap" />
+    </div>
+    <div class="form-group">
+        <label for="Gender">Gender</label>
+        <InputText id="Gender" class="form-control" @bind-Value="newMember.Gender" />
+    </div>
+    <button type="submit" class="btn btn-primary">Add Member</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(errorMessage))
 {
-    <p><em>Loading...</em></p>
+    <div class="alert alert-danger">@errorMessage</div>
 }
-else
-{
-    <table class="table">
-        <thead>
+
+<!-- Displaying members list -->
+<table class="table">
+    <thead>
+    <tr>
+        <th>Membership Number</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Handicap</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var member in members)
+    {
         <tr>
-            <th>Membership Number</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Gender</th>
-            <th>Handicap</th>
+            <td>@member.MembershipNumber</td>
+            <td>@member.Name</td>
+            <td>@member.Email</td>
+            <td>@member.Handicap</td>
         </tr>
-        </thead>
-        <tbody>
-        @foreach (var member in members)
-        {
-            <tr>
-                <td>@member.MembershipNumber</td>
-                <td>@member.Name</td>
-                <td>@member.Email</td>
-                <td>@member.Gender</td>
-                <td>@member.Handicap</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
+    }
+    </tbody>
+</table>
+
+<button @onclick="FetchMembers">Load Members</button>
 
 @code {
-    private List<Member> members;
+    private List<Member> members = new();
+    private MemberCreateDTO newMember = new();
+    private string errorMessage;
 
-    protected override async Task OnInitializedAsync()
+    private async Task AddMember()
     {
-        members = await Http.GetFromJsonAsync<List<Member>>("http://localhost:5080/api/members");
+        var response = await Http.PostAsJsonAsync("api/member", newMember);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var addedMember = await response.Content.ReadFromJsonAsync<Member>();
+            members.Add(addedMember);
+            newMember = new MemberCreateDTO(); // Reset form after submission
+        }
+         else
+        {
+            // Display unsuccessful message
+            errorMessage = "Failed to Add Member";
+
+
+        }
+    }
+
+    private async Task FetchMembers()
+    {
+        members = await Http.GetFromJsonAsync<List<Member>>("api/member");
     }
 }

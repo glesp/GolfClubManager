@@ -37,6 +37,11 @@ namespace GolfClubManagerAPI.Migrations
                     b.Property<int>("Handicap")
                         .HasColumnType("int");
 
+                    b.Property<string>("MembershipNumber")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
