@@ -1,4 +1,6 @@
 // MemberService.cs
+
+using System.ComponentModel.DataAnnotations;
 using GolfClubManagerAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,22 +18,34 @@ namespace GolfClubManagerAPI.Services
         // Add a new member
         public async Task<Member> AddMemberAsync(Member member)
         {
-            
-            // Get the last MembershipNumber (if any)
+            // ✅ Backend Validation: Ensure Name, Email, Gender, and Handicap are valid
+            if (string.IsNullOrWhiteSpace(member.Name))
+                throw new ArgumentException("Member name is required.");
+
+            if (string.IsNullOrWhiteSpace(member.Email) || !new EmailAddressAttribute().IsValid(member.Email))
+                throw new ArgumentException("Invalid email format.");
+
+            if (string.IsNullOrWhiteSpace(member.Gender) || (member.Gender != "Male" && member.Gender != "Female" && member.Gender != "Other"))
+                throw new ArgumentException("Invalid gender. Must be Male, Female, or Other.");
+
+            if (member.Handicap < 0 || member.Handicap > 54)
+                throw new ArgumentException("Handicap must be between 0 and 54.");
+
+            // ✅ Generate MembershipNumber (auto-increment logic)
             var lastMember = await _context.Members
                 .OrderByDescending(m => m.MembershipNumber)
                 .FirstOrDefaultAsync();
 
-            // Generate the next MembershipNumber (if there is a last member, increment the MembershipNumber)
             var newMembershipNumber = lastMember != null ? lastMember.MembershipNumber + 1 : 1;
-
             member.MembershipNumber = newMembershipNumber;
 
-            // You can add validation here if necessary
+            // ✅ Save valid member to the database
             _context.Members.Add(member);
             await _context.SaveChangesAsync();
+    
             return member;
         }
+
         
         // Get a member by their ID
         public async Task<Member?> GetMemberByIdAsync(int id)

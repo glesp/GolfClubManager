@@ -2,6 +2,7 @@
 @using GolfClubManagerWASM.DTOs
 @using GolfClubManagerWASM.Models
 @inject HttpClient Http
+@inject IJSRuntime JS
 
 <h3 class="text-center text-primary">👥 Members</h3>
 
@@ -16,10 +17,12 @@
             <div class="col-md-6">
                 <label class="form-label fw-bold">Name</label>
                 <InputText class="form-control" @bind-Value="newMember.Name" placeholder="Enter full name" />
+                <ValidationMessage For="@(() => newMember.Name)" class="text-danger" />
             </div>
             <div class="col-md-6">
                 <label class="form-label fw-bold">Email</label>
                 <InputText class="form-control" @bind-Value="newMember.Email" placeholder="Enter email" />
+                <ValidationMessage For="@(() => newMember.Email)" class="text-danger" />
             </div>
         </div>
 
@@ -27,10 +30,17 @@
             <div class="col-md-4">
                 <label class="form-label fw-bold">Handicap</label>
                 <InputNumber class="form-control" @bind-Value="newMember.Handicap" />
+                <ValidationMessage For="@(() => newMember.Handicap)" class="text-danger" />
             </div>
             <div class="col-md-4">
                 <label class="form-label fw-bold">Gender</label>
-                <InputText class="form-control" @bind-Value="newMember.Gender" placeholder="Male/Female" />
+                <InputSelect class="form-control" @bind-Value="newMember.Gender">
+                    <option value="">-- Select Gender --</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </InputSelect>
+                <ValidationMessage For="@(() => newMember.Gender)" class="text-danger" />
             </div>
             <div class="col-md-4 d-flex align-items-end">
                 <button type="submit" class="btn btn-success w-100">
@@ -39,6 +49,32 @@
             </div>
         </div>
     </EditForm>
+
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <!-- ✅ Success Toast -->
+            <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ✅ Member successfully added!
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+
+            <!-- ❌ Error Toast -->
+            <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ❌ Error: Could not add member. Please check inputs.
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     @if (!string.IsNullOrEmpty(errorMessage))
     {
@@ -93,10 +129,16 @@
             var addedMember = await response.Content.ReadFromJsonAsync<Member>();
             members.Add(addedMember);
             newMember = new MemberCreateDTO(); // Reset form after submission
+            
+            // ✅ Show success toast
+            await JS.InvokeVoidAsync("showToast", "successToast");
         }
         else
         {
             errorMessage = "❌ Failed to Add Member";
+            
+            // ❌ Show error toast
+            await JS.InvokeVoidAsync("showToast", "errorToast");
         }
     }
 
