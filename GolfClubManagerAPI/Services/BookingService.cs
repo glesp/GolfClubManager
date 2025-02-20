@@ -26,7 +26,16 @@ public class BookingService
     
         foreach (var memberId in bookingDTO.MemberIds)
         {
+            if (memberId == 0) continue; // 🛑 Skip empty member slots
+
             newBookings.Add(new TeeTimeBooking { TeeTimeSlotId = bookingDTO.TeeTimeSlotId, MemberId = memberId });
+            Console.WriteLine($"✅ Adding booking for MemberId: {memberId} at TeeTimeSlot {bookingDTO.TeeTimeSlotId}");
+        }
+        
+        if (newBookings.Count == 0)
+        {
+            Console.WriteLine("❌ ERROR: No valid members selected for booking.");
+            throw new InvalidOperationException("At least one valid member is required to book.");
         }
         
         // 🔥 FIX: Disable tracking before saving
