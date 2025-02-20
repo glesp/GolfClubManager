@@ -3,6 +3,7 @@
 @using GolfClubManagerWASM.Services
 @inject HttpClient Http
 @inject BookingService BookingService
+@inject IJSRuntime JS
 
 <h3>Book a Tee Time</h3>
 
@@ -51,23 +52,48 @@
 
 <table class="table">
     <thead>
-        <tr>
-            <th>Booking Time</th>
-            <th>Member Name</th>
-            <th>Slot</th>
-        </tr>
+    <tr>
+        <th>Booking Time</th>
+        <th>Member Name</th>
+        <th>Slot</th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var booking in currentBookings)
-        {
-            <tr>
-                <td>@booking.BookingTime.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@booking.MemberName</td>
-                <td>@booking.TeeTimeSlotId</td>
-            </tr>
-        }
+    @foreach (var booking in currentBookings)
+    {
+        <tr>
+            <td>@booking.BookingTime.ToString("yyyy-MM-dd HH:mm")</td>
+            <td>@booking.MemberName</td>
+            <td>@booking.TeeTimeSlotId</td>
+        </tr>
+    }
     </tbody>
 </table>
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <!-- ✅ Success Toast -->
+        <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ✅ Booking successfully added!
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+
+        <!-- ❌ Error Toast -->
+        <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ❌ Member cannot book more than once per day!
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @code {
     private BookingDTO bookingFormModel = new BookingDTO { MemberIds = new List<int> { 0, 0, 0, 0 } };
@@ -153,12 +179,14 @@
         if (success)
         {
             Console.WriteLine("✅ Booking successful!");
+            await JS.InvokeVoidAsync("showToast", "successToast"); // ✅ Calls site.js function to show a success toast
             currentBookings = await BookingService.GetBookingsForDateAsync(DateTime.Now);
             bookingFormModel = new BookingDTO { MemberIds = new List<int> { 0, 0, 0, 0 } };
         }
         else
         {
             Console.WriteLine("❌ Booking failed. Please try again.");
+            await JS.InvokeVoidAsync("showToast", "errorToast"); // ❌ Calls site.js function to show an error toast
         }
     }
 }

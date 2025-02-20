@@ -33,6 +33,10 @@
       "PackagePath": "staticwebassets\\index.html"
     },
     {
+      "Id": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
       "Id": "C:\\Users\\gille\\RiderProjects\\GolfClubManager\\GolfClubManagerWASM\\wwwroot\\sample-data\\weather.json",
       "PackagePath": "staticwebassets\\sample-data\\weather.json"
     },

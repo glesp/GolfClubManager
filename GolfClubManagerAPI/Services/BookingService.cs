@@ -23,10 +23,24 @@ public class BookingService
         }
 
         var newBookings = new List<TeeTimeBooking>();
+        var bookingDate = teeTimeSlot.BookingTime.Date; // Extract the date
+
     
         foreach (var memberId in bookingDTO.MemberIds)
         {
             if (memberId == 0) continue; // 🛑 Skip empty member slots
+            
+            // 🛑 Check if this member already has a booking on the same day
+            bool alreadyBooked = await _context.TeeTimeBookings
+                .Include(b => b.TeeTimeSlot)
+                .AnyAsync(b => b.MemberId == memberId && b.TeeTimeSlot.BookingTime.Date == bookingDate);
+
+            if (alreadyBooked)
+            {
+                Console.WriteLine($"❌ ERROR: Member {memberId} already booked on {bookingDate}");
+                throw new InvalidOperationException($"Member {memberId} cannot book more than once per day.");
+            }
+
 
             newBookings.Add(new TeeTimeBooking { TeeTimeSlotId = bookingDTO.TeeTimeSlotId, MemberId = memberId });
             Console.WriteLine($"✅ Adding booking for MemberId: {memberId} at TeeTimeSlot {bookingDTO.TeeTimeSlotId}");
