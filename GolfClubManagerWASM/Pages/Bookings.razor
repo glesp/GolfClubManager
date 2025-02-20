@@ -130,11 +130,10 @@
 
         availableMembers = await BookingService.GetAllMembersAsync() ?? new List<MemberDTO>();
         availableSlots = await BookingService.GetAvailableSlotsAsync(DateTime.Now) ?? new List<TeeTimeSlotDTO>();
-        currentBookings = await BookingService.GetBookingsForDateAsync(DateTime.Now) ?? new List<BookingDisplayDTO>();
+        await LoadBookingsForNext7Days();
 
         Console.WriteLine($"✅ Available members count: {availableMembers.Count}");
         Console.WriteLine($"✅ Available slots count: {availableSlots.Count}");
-        Console.WriteLine($"✅ Current bookings count: {currentBookings.Count}");
         Console.WriteLine($"🔹 MemberIds before adjustment: {string.Join(", ", bookingFormModel.MemberIds)}");
 
         // Ensure MemberIds always has 4 elements
@@ -174,15 +173,29 @@
             Console.WriteLine($"❌ ERROR: Invalid selection value {e.Value}");
         }
     }
+    
+    private async Task LoadBookingsForNext7Days()
+    {
+        currentBookings.Clear();
 
-
-
+        for (int i = 0; i < 7; i++)
+        {
+            var date = DateTime.Now.AddDays(i);
+            var bookingsForDay = await BookingService.GetBookingsForDateAsync(date);
+        
+            if (bookingsForDay != null)
+            {
+                currentBookings.AddRange(bookingsForDay);
+            }
+        }
+    }
 
 
 
     private async Task BookTeeTime()
     {
         Console.WriteLine($"📌 Attempting to book tee time for members: {string.Join(", ", bookingFormModel.MemberIds)}");
+        
         
         // Check for invalid indices before looping
         for (int i = 0; i < 4; i++)  
@@ -207,7 +220,7 @@
             bookingFormModel = new BookingDTO { MemberIds = new List<int> { 0, 0, 0, 0 } };
         }
         else
-        {
+        {   
             Console.WriteLine("❌ Booking failed. Please try again.");
             await JS.InvokeVoidAsync("showToast", "errorToast"); // ❌ Calls site.js function to show an error toast
         }

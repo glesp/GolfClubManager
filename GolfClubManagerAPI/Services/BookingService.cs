@@ -30,10 +30,26 @@ public class BookingService
         {
             if (memberId == 0) continue; // 🛑 Skip empty member slots
             
+            var existingBookings = await _context.TeeTimeBookings
+                .Include(b => b.TeeTimeSlot)
+                .Where(b => b.MemberId == memberId)
+                .ToListAsync();
+
+// Log all existing bookings
+            foreach (var booking in existingBookings)
+            {
+                Console.WriteLine($"🔍 DEBUG: Member {memberId} already booked on {booking.TeeTimeSlot.BookingTime:yyyy-MM-dd HH:mm}");
+            }
+
+            Console.WriteLine($"📌 Requested Booking Date: {teeTimeSlot.BookingTime:yyyy-MM-dd HH:mm}");
+
+            
             // 🛑 Check if this member already has a booking on the same day
             bool alreadyBooked = await _context.TeeTimeBookings
-                .Include(b => b.TeeTimeSlot)
-                .AnyAsync(b => b.MemberId == memberId && b.TeeTimeSlot.BookingTime.Date == bookingDate);
+                .Where(b => b.MemberId == memberId)
+                .Select(b => new { BookingDate = b.TeeTimeSlot.BookingTime.Date })
+                .AnyAsync(b => b.BookingDate == teeTimeSlot.BookingTime.Date);
+
 
             if (alreadyBooked)
             {
