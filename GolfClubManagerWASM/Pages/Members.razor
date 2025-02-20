@@ -108,17 +108,22 @@
         </tbody>
     </table>
 
-    <div class="text-center">
-        <button class="btn btn-primary shadow-sm mt-2" @onclick="FetchMembers">
-            🔄 Load Members
-        </button>
-    </div>
+    @* <div class="text-center"> *@
+    @*     <button class="btn btn-primary shadow-sm mt-2" @onclick="FetchMembers"> *@
+    @*         🔄 Load Members *@
+    @*     </button> *@
+    @* </div> *@
 </div>
 
 @code {
     private List<Member> members = new();
     private MemberCreateDTO newMember = new();
     private string errorMessage;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchMembers(); 
+    }
 
     private async Task AddMember()
     {
