@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "GolfClubManagerWASM",
   "resources": {
-    "hash": "sha256-IzJyWewadNVksfReH4TvOYpEnSb86KM7y8l/Z12k1M8=",
+    "hash": "sha256-lSgngTv0z/r2yo08ereAD/tIIJgrb7iPSPutQqcGgDw=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-VdKq87/z5NIxZKmuM+fv38XF+RcEb/bg3jVBwQSfwP4="
     },
@@ -209,10 +209,10 @@
       "mscorlib.wasm": "sha256-04e4k5XU8HWGB/dq/2+j84xzzGPflTs0IYWI0OxogVc=",
       "netstandard.wasm": "sha256-gnGZURPnoSmjXuYNCOJi5tt8qn2LRImWgue1Ru3/TDQ=",
       "System.Private.CoreLib.wasm": "sha256-6w3jYr0arcp8jnt4aeqh+AmqrLA6q7jl9rQYAwLzE0M=",
-      "GolfClubManagerWASM.wasm": "sha256-wwFcpQhJ8dEpaF2cfAIHNwOfWeGzNTw6R3c51Opllkg="
+      "GolfClubManagerWASM.wasm": "sha256-40xmq9NwwqCrLpCX9fy3Mzad5mW8juk92gItcllNrvs="
     },
     "pdb": {
-      "GolfClubManagerWASM.pdb": "sha256-2q/pBEA8Gd0AgC9EnWO1XvaF3R7ArPZb248qbCFjOik="
+      "GolfClubManagerWASM.pdb": "sha256-eaZbr2TJ48zgB83Ldibj1uvWzu/cMKsEHO3mm30Lb/Q="
     }
   },
   "cacheBootResources": true,
