@@ -7,68 +7,91 @@
 
 <h3>Book a Tee Time</h3>
 
-<EditForm Model="bookingFormModel" OnValidSubmit="BookTeeTime">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<h3 class="text-center text-primary">⛳ Book a Tee Time</h3>
 
-    <div>
-        <label>Select Tee Time:</label>
-        <select @bind="bookingFormModel.TeeTimeSlotId">
-            <option value="0" disabled selected>-- Select a Tee Time --</option>
-            @foreach (var slot in availableSlots)
-            {
-                <option value="@slot.Id">@slot.BookingTime.ToString("yyyy-MM-dd HH:mm")</option>
-            }
-        </select>
-    </div>
+<div class="card shadow-lg p-4">
+    <EditForm Model="bookingFormModel" OnValidSubmit="BookTeeTime">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="alert alert-danger" />
 
-    <div>
-        <label>Select Players:</label>
-        @for (int i = 0; i < 4; i++)
-        {
-            int capturedIndex = i; // Ensure index is fixed inside this iteration
+        <!-- Tee Time Selection -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">📅 Select Tee Time:</label>
+            <select class="form-select" @bind="bookingFormModel.TeeTimeSlotId">
+                <option value="0" disabled selected>-- Select a Tee Time --</option>
+                @foreach (var slot in availableSlots)
+                {
+                    <option value="@slot.Id">@slot.BookingTime.ToString("yyyy-MM-dd HH:mm")</option>
+                }
+            </select>
+        </div>
 
-            <div>
-                <label>Player @(capturedIndex + 1)</label>
-                <select class="form-control" @onchange="(e) => HandleMemberChange(capturedIndex, e)">
-                    <option value="0">Select Member</option>
-                    @foreach (var member in availableMembers)
-                    {
-                        <option value="@member.Id">@member.Name</option>
-                    }
-                </select>
+        <!-- Player Selection -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">👥 Select Players:</label>
+            <div class="row">
+                @for (int i = 0; i < 4; i++)
+                {
+                    int capturedIndex = i; // Ensure index is fixed inside this iteration
+
+                    <div class="col-md-6 col-lg-3 mb-2">
+                        <label class="form-label">Player @(capturedIndex + 1)</label>
+                        <select class="form-select" @onchange="(e) => HandleMemberChange(capturedIndex, e)">
+                            <option value="0">Select Member</option>
+                            @foreach (var member in availableMembers)
+                            {
+                                <option value="@member.Id">@member.Name</option>
+                            }
+                        </select>
+                    </div>
+                }
             </div>
-        }
+        </div>
 
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-lg btn-success shadow-sm">
+                ⛳ Book Tee Time
+            </button>
+        </div>
+    </EditForm>
+</div>
 
-
-
-    </div>
-
-    <button type="submit" class="btn btn-primary">Book Tee Time</button>
-</EditForm>
 
 <h3>Current Bookings</h3>
 
-<table class="table">
-    <thead>
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
     <tr>
-        <th>Booking Time</th>
-        <th>Member Name</th>
-        <th>Slot</th>
+        <th class="text-center">Date</th>
+        <th class="text-center">Time</th>
+        <th style="width: 40%;">Member Name</th> @* Wider column for names *@
+        @* <th class="text-center">Slot</th> *@
+        <th class="text-center">Handicap</th>
     </tr>
     </thead>
     <tbody>
-    @foreach (var booking in currentBookings)
+    @foreach (var group in currentBookings.GroupBy(b => b.TeeTimeSlotId))
     {
-        <tr>
-            <td>@booking.BookingTime.ToString("yyyy-MM-dd HH:mm")</td>
-            <td>@booking.MemberName</td>
-            <td>@booking.TeeTimeSlotId</td>
+        @foreach (var booking in group)
+        {
+            <tr>
+                <td class="text-center">@booking.BookingTime.ToString("dd-MM-yyyy")</td>
+                <td class="text-center">@booking.BookingTime.ToString("HH:mm")</td>
+                <td>@booking.MemberName</td>
+                @* <td class="text-center">@booking.TeeTimeSlotId</td> *@
+                <td class="text-center">@booking.Handicap</td>
+            </tr>
+        }
+        <!-- Optional separator for groups -->
+        <tr class="table-secondary">
+            <td colspan="5"></td>
         </tr>
     }
     </tbody>
 </table>
+
+
 
 <div aria-live="polite" aria-atomic="true" class="position-relative">
     <div class="toast-container position-fixed bottom-0 end-0 p-3">

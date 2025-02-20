@@ -86,7 +86,8 @@ public class BookingService
             {
                 MemberName = b.Member.Name,
                 BookingTime = b.TeeTimeSlot.BookingTime,
-                TeeTimeSlotId = b.TeeTimeSlotId
+                TeeTimeSlotId = b.TeeTimeSlotId,
+                Handicap = b.Member.Handicap
             })
             .ToListAsync();
     }
