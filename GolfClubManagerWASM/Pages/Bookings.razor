@@ -57,6 +57,32 @@
     </EditForm>
 </div>
 
+<div class="card shadow-lg p-4">
+    <h5 class="text-center">🔍 View Bookings for a Member</h5>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Select Member:</label>
+        <select class="form-select" @onchange="HandleMemberSelection">
+            <option value="0" disabled selected>-- Select Member --</option>
+            @foreach (var member in availableMembers)
+            {
+                <option value="@member.Id">@member.Name</option>
+            }
+        </select>
+    </div>
+</div>
+
+<!-- Display message if no bookings exist -->
+@if (selectedMemberId > 0 && !currentBookings.Any())
+{
+    <div class="alert alert-warning text-center">
+        ❌ No bookings found for this member in the next 7 days.
+    </div>
+}
+
+
+
+
 
 <h3>Current Bookings</h3>
 
@@ -123,6 +149,7 @@
     private List<TeeTimeSlotDTO> availableSlots = new();
     private List<MemberDTO> availableMembers = new();
     private List<BookingDisplayDTO> currentBookings = new();
+    private int selectedMemberId = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -225,4 +252,41 @@
             await JS.InvokeVoidAsync("showToast", "errorToast"); // ❌ Calls site.js function to show an error toast
         }
     }
+    
+    private async Task HandleMemberSelection(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int memberId))
+        {
+            selectedMemberId = memberId;
+            Console.WriteLine($"📌 Member selected: {selectedMemberId}");
+
+            await FetchBookingsForMember();
+        }
+    }
+
+    private async Task FetchBookingsForMember()
+    {
+        if (selectedMemberId == 0)
+        {
+            Console.WriteLine("❌ No member selected.");
+            return;
+        }
+
+        Console.WriteLine($"📌 Fetching bookings for Member ID: {selectedMemberId}");
+
+        currentBookings.Clear();
+
+        for (int i = 0; i < 7; i++)  // Loop for the next 7 days
+        {
+            var date = DateTime.Now.AddDays(i);
+            var bookingsForDay = await Http.GetFromJsonAsync<List<BookingDisplayDTO>>($"api/booking/member/{selectedMemberId}?date={date:yyyy-MM-dd}")
+                                 ?? new List<BookingDisplayDTO>();
+
+            currentBookings.AddRange(bookingsForDay);
+        }
+
+        // Ensure UI updates
+        StateHasChanged();
+    }
+    
 }

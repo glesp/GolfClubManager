@@ -107,4 +107,28 @@ public class BookingService
             })
             .ToListAsync();
     }
+    
+    public async Task<List<BookingDisplayDTO>> GetBookingsForMemberAsync(int memberId, DateTime? date = null)
+    {
+        var query = _context.TeeTimeBookings
+            .Where(b => b.MemberId == memberId)
+            .Include(b => b.TeeTimeSlot)
+            .Include(b => b.Member)
+            .Select(b => new BookingDisplayDTO
+            {
+                MemberName = b.Member.Name,
+                BookingTime = b.TeeTimeSlot.BookingTime,
+                TeeTimeSlotId = b.TeeTimeSlotId,
+                Handicap = b.Member.Handicap
+            });
+
+        if (date.HasValue)
+        {
+            query = query.Where(b => b.BookingTime.Date == date.Value.Date);
+        }
+
+        return await query.ToListAsync();
+    }
+
+
 }

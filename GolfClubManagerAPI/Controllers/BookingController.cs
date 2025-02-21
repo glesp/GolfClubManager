@@ -34,5 +34,18 @@ namespace GolfClubManagerAPI.Controllers
             var bookings = await _bookingService.GetBookingsForDate(date);
             return Ok(bookings);
         }
+        
+        [HttpGet("member/{memberId}")]
+        public async Task<ActionResult<IEnumerable<BookingDisplayDTO>>> GetBookingsForMember(int memberId, [FromQuery] DateTime? date = null)
+        {
+            var bookings = await _bookingService.GetBookingsForMemberAsync(memberId, date);
+            if (bookings == null || bookings.Count == 0)
+            {
+                return Ok(new List<BookingDisplayDTO>());  // Return an empty list instead of NotFound
+            }
+            return Ok(bookings);
+        }
+
+
     }
 }
