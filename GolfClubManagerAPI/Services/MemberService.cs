@@ -2,6 +2,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using GolfClubManagerAPI.Data;
+using GolfClubManagerAPI.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace GolfClubManagerAPI.Services
@@ -55,10 +56,52 @@ namespace GolfClubManagerAPI.Services
         }
         
         // Get all members
-        public async Task<List<Member>> GetAllMembersAsync()
+        public async Task<List<MemberDTO>> GetAllMembersAsync(string? gender, string? handicapRange, string? sortBy, string? order)
         {
-            return await _context.Members.ToListAsync();
+            var query = _context.Members.AsQueryable();
+
+            // 🏷️ Filter by Gender
+            if (!string.IsNullOrWhiteSpace(gender))
+            {
+                query = query.Where(m => m.Gender == gender);
+            }
+
+            // 🎯 Filter by Handicap Range
+            if (!string.IsNullOrWhiteSpace(handicapRange))
+            {
+                switch (handicapRange)
+                {
+                    case "Below 10":
+                        query = query.Where(m => m.Handicap < 10);
+                        break;
+                    case "11-20":
+                        query = query.Where(m => m.Handicap >= 11 && m.Handicap <= 20);
+                        break;
+                    case "Above 20":
+                        query = query.Where(m => m.Handicap > 20);
+                        break;
+                }
+            }
+
+            // 🔄 Sorting Logic
+            bool descending = order == "desc";
+            query = sortBy switch
+            {
+                "Name" => descending ? query.OrderByDescending(m => m.Name) : query.OrderBy(m => m.Name),
+                "Handicap" => descending ? query.OrderByDescending(m => m.Handicap) : query.OrderBy(m => m.Handicap),
+                _ => query.OrderBy(m => m.Name) // Default: Sort by Name (asc)
+            };
+
+            return await query.Select(m => new MemberDTO
+            {
+                Id = m.Id,
+                Name = m.Name,
+                Email = m.Email,
+                Gender = m.Gender,
+                Handicap = m.Handicap
+            }).ToListAsync();
         }
+
     
     }
     

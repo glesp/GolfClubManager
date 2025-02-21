@@ -1,6 +1,7 @@
 // MemberController.cs
 
 using GolfClubManagerAPI.Data;
+using GolfClubManagerAPI.DTOs;
 using GolfClubManagerAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,10 +41,15 @@ namespace GolfClubManagerAPI.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Member>>> GetMembers()
+        public async Task<ActionResult<IEnumerable<MemberDTO>>> GetMembers(
+            [FromQuery] string? gender, 
+            [FromQuery] string? handicapRange,
+            [FromQuery] string? sortBy,
+            [FromQuery] string? order)
         {
-            var members = await _memberService.GetAllMembersAsync();
+            var members = await _memberService.GetAllMembersAsync(gender, handicapRange, sortBy, order);
             return Ok(members);
         }
+
     }
 }

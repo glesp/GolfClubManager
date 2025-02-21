@@ -48,37 +48,47 @@
             </div>
         </div>
     </EditForm>
+</div>
 
-    <div aria-live="polite" aria-atomic="true" class="position-relative">
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <!-- ✅ Success Toast -->
-            <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        ✅ Member successfully added!
-                    </div>
-                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-            </div>
+<!-- 🔎 Filters & Sorting -->
+<div class="card shadow-lg p-4 mb-4">
+    <h5 class="card-title text-center">🔎 Filter & Sort Members</h5>
+    <div class="row">
+        <!-- Gender Filter -->
+        <div class="col-md-4">
+            <label class="form-label fw-bold">Filter by Gender:</label>
+            <select class="form-select" @onchange="HandleGenderChange">
 
-            <!-- ❌ Error Toast -->
-            <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        ❌ Error: Could not add member. Please check inputs.
-                    </div>
-                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-            </div>
+            <option value="">All</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+
+        <!-- Handicap Filter -->
+        <div class="col-md-4">
+            <label class="form-label fw-bold">Filter by Handicap:</label>
+            <select class="form-select" @onchange="HandleHandicapChange">
+
+            <option value="All">All</option>
+                <option value="Below10">Below 10</option>
+                <option value="Between11And20">Between 11 and 20</option>
+                <option value="Above20">Above 20</option>
+            </select>
+        </div>
+
+        <!-- Sorting -->
+        <div class="col-md-4">
+            <label class="form-label fw-bold">Sort Members:</label>
+            <select class="form-select" @onchange="HandleSortChange">
+
+            <option value="NameAsc">Name (A → Z)</option>
+                <option value="NameDesc">Name (Z → A)</option>
+                <option value="HandicapAsc">Handicap (Low → High)</option>
+                <option value="HandicapDesc">Handicap (High → Low)</option>
+            </select>
         </div>
     </div>
-
-
-
-    @if (!string.IsNullOrEmpty(errorMessage))
-    {
-        <div class="alert alert-danger mt-3 text-center">@errorMessage</div>
-    }
 </div>
 
 <!-- Members List -->
@@ -95,7 +105,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var member in members)
+        @foreach (var member in filteredMembers)
         {
             <tr>
                 <td>@member.MembershipNumber</td>
@@ -106,23 +116,60 @@
         }
         </tbody>
     </table>
-
-    @* <div class="text-center"> *@
-    @*     <button class="btn btn-primary shadow-sm mt-2" @onclick="FetchMembers"> *@
-    @*         🔄 Load Members *@
-    @*     </button> *@
-    @* </div> *@
 </div>
 
 @code {
     private List<Member> members = new();
+    private List<Member> filteredMembers = new();
     private MemberCreateDTO newMember = new();
     private string errorMessage;
-    
+
+    private string selectedGender = "";
+    private string selectedHandicapRange = "All";
+    private string selectedSortOption = "NameAsc";
+
     protected override async Task OnInitializedAsync()
     {
-        await FetchMembers(); 
+        await FetchMembers();
     }
+    
+    private void HandleGenderChange(ChangeEventArgs e)
+    {
+        HandleFilterChange(e, "Gender");
+    }
+    
+    private void HandleHandicapChange(ChangeEventArgs e)
+    {
+        HandleFilterChange(e, "Handicap");
+    }
+
+    private void HandleSortChange(ChangeEventArgs e)
+    {
+        HandleFilterChange(e, "Sort");
+    }
+
+
+    
+    private void HandleFilterChange(ChangeEventArgs e, string filterType)
+    {
+        string value = e.Value?.ToString() ?? "";
+
+        switch (filterType)
+        {
+            case "Gender":
+                selectedGender = value;
+                break;
+            case "Handicap":
+                selectedHandicapRange = value;
+                break;
+            case "Sort":
+                selectedSortOption = value;
+                break;
+        }
+
+        ApplyFilters(); // Apply filtering and sorting after the selection change
+    }
+
 
     private async Task AddMember()
     {
@@ -133,21 +180,42 @@
             var addedMember = await response.Content.ReadFromJsonAsync<Member>();
             members.Add(addedMember);
             newMember = new MemberCreateDTO(); // Reset form after submission
-            
-            // ✅ Show success toast
-            await JS.InvokeVoidAsync("showToast", "successToast");
+            ApplyFilters();
+            await JS.InvokeVoidAsync("showToast", "successToast"); // ✅ Show success toast
         }
         else
         {
             errorMessage = "❌ Failed to Add Member";
-            
-            // ❌ Show error toast
-            await JS.InvokeVoidAsync("showToast", "errorToast");
+            await JS.InvokeVoidAsync("showToast", "errorToast"); // ❌ Show error toast
         }
     }
 
     private async Task FetchMembers()
     {
         members = await Http.GetFromJsonAsync<List<Member>>("api/member");
+        ApplyFilters(); // Apply filters immediately after fetching
+    }
+
+    private void ApplyFilters()
+    {
+        filteredMembers = members.Where(m =>
+            (string.IsNullOrEmpty(selectedGender) || m.Gender == selectedGender) &&
+            (selectedHandicapRange == "All" ||
+             (selectedHandicapRange == "Below10" && m.Handicap < 10) ||
+             (selectedHandicapRange == "Between11And20" && m.Handicap >= 11 && m.Handicap <= 20) ||
+             (selectedHandicapRange == "Above20" && m.Handicap > 20))
+        ).ToList();
+
+        // Apply Sorting
+        filteredMembers = selectedSortOption switch
+        {
+            "NameAsc" => filteredMembers.OrderBy(m => m.Name).ToList(),
+            "NameDesc" => filteredMembers.OrderByDescending(m => m.Name).ToList(),
+            "HandicapAsc" => filteredMembers.OrderBy(m => m.Handicap).ToList(),
+            "HandicapDesc" => filteredMembers.OrderByDescending(m => m.Handicap).ToList(),
+            _ => filteredMembers
+        };
+
+        StateHasChanged();
     }
 }
