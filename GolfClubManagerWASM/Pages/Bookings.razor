@@ -63,7 +63,7 @@
     <div class="mb-3">
         <label class="form-label fw-bold">Select Member:</label>
         <select class="form-select" @onchange="HandleMemberSelection">
-            <option value="0" disabled selected>-- Select Member --</option>
+            <option value="0" selected>All Members</option> <!-- Added "All Members" -->
             @foreach (var member in availableMembers)
             {
                 <option value="@member.Id">@member.Name</option>
@@ -73,12 +73,13 @@
 </div>
 
 <!-- Display message if no bookings exist -->
-@if (selectedMemberId > 0 && !currentBookings.Any())
+@if (selectedMemberId >= 0 && !currentBookings.Any())
 {
     <div class="alert alert-warning text-center">
-        ❌ No bookings found for this member in the next 7 days.
+        ❌ No bookings found for the selected option in the next 7 days.
     </div>
 }
+
 
 
 
@@ -258,7 +259,7 @@
         if (int.TryParse(e.Value?.ToString(), out int memberId))
         {
             selectedMemberId = memberId;
-            Console.WriteLine($"📌 Member selected: {selectedMemberId}");
+            Console.WriteLine($"📌 Member selection changed to: {(selectedMemberId == 0 ? "All Members" : $"Member ID {selectedMemberId}")}");
 
             await FetchBookingsForMember();
         }
@@ -266,22 +267,18 @@
 
     private async Task FetchBookingsForMember()
     {
-        if (selectedMemberId == 0)
-        {
-            Console.WriteLine("❌ No member selected.");
-            return;
-        }
-
-        Console.WriteLine($"📌 Fetching bookings for Member ID: {selectedMemberId}");
+        Console.WriteLine($"📌 Fetching bookings for {(selectedMemberId == 0 ? "All Members" : $"Member ID {selectedMemberId}")}");
 
         currentBookings.Clear();
 
         for (int i = 0; i < 7; i++)  // Loop for the next 7 days
         {
             var date = DateTime.Now.AddDays(i);
-            var bookingsForDay = await Http.GetFromJsonAsync<List<BookingDisplayDTO>>($"api/booking/member/{selectedMemberId}?date={date:yyyy-MM-dd}")
-                                 ?? new List<BookingDisplayDTO>();
+            var url = selectedMemberId == 0 
+                ? $"api/booking/all?date={date:yyyy-MM-dd}" // Fetch all bookings
+                : $"api/booking/member/{selectedMemberId}?date={date:yyyy-MM-dd}"; // Fetch specific member's bookings
 
+            var bookingsForDay = await Http.GetFromJsonAsync<List<BookingDisplayDTO>>(url) ?? new List<BookingDisplayDTO>();
             currentBookings.AddRange(bookingsForDay);
         }
 

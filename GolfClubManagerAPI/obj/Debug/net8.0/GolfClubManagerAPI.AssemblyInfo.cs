@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GolfClubManagerAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+69128f623714f34dbd70b38b47a16ea335d063cb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff86f8c74557a1fc5f6936f8ac59dd2079745d05")]
 [assembly: System.Reflection.AssemblyProductAttribute("GolfClubManagerAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GolfClubManagerAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

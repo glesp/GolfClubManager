@@ -45,6 +45,14 @@ namespace GolfClubManagerAPI.Controllers
             }
             return Ok(bookings);
         }
+        
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<BookingDisplayDTO>>> GetAllBookings([FromQuery] DateTime? date = null)
+        {
+            var bookings = await _bookingService.GetAllBookingsAsync(date);
+            return Ok(bookings);
+        }
+
 
 
     }

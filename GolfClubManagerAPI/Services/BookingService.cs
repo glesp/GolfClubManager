@@ -129,6 +129,28 @@ public class BookingService
 
         return await query.ToListAsync();
     }
+    
+    public async Task<List<BookingDisplayDTO>> GetAllBookingsAsync(DateTime? date = null)
+    {
+        var query = _context.TeeTimeBookings
+            .Include(b => b.TeeTimeSlot)
+            .Include(b => b.Member)
+            .Select(b => new BookingDisplayDTO
+            {
+                MemberName = b.Member.Name,
+                BookingTime = b.TeeTimeSlot.BookingTime,
+                TeeTimeSlotId = b.TeeTimeSlotId,
+                Handicap = b.Member.Handicap
+            });
+
+        if (date.HasValue)
+        {
+            query = query.Where(b => b.BookingTime.Date == date.Value.Date);
+        }
+
+        return await query.ToListAsync();
+    }
+
 
 
 }
