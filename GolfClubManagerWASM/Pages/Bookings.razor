@@ -9,6 +9,26 @@
 
 <h3 class="text-center text-primary">⛳ Book a Tee Time</h3>
 
+<!-- Add this code right after the "<h3 class="text-center text-primary">⛳ Book a Tee Time</h3>" line -->
+
+<div class="card shadow-lg p-4 mb-4">
+    <div class="mb-3">
+        <label class="form-label fw-bold">📅 Select Date:</label>
+        <input type="date" class="form-control"
+               value="@DateTime.Now.ToString("yyyy-MM-dd")"
+               min="@DateTime.Now.ToString("yyyy-MM-dd")"
+               max="@DateTime.Now.AddDays(30).ToString("yyyy-MM-dd")"
+               @onchange="DateChanged" />
+
+        @if (availableSlots.Count == 0)
+        {
+            <div class="alert alert-warning mt-2">
+                No tee times available for the selected date.
+            </div>
+        }
+    </div>
+</div>
+
 <div class="card shadow-lg p-4">
     <EditForm Model="bookingFormModel" OnValidSubmit="BookTeeTime">
         <DataAnnotationsValidator />
@@ -157,7 +177,10 @@
         Console.WriteLine("🔹 Initializing Bookings...");
 
         availableMembers = await BookingService.GetAllMembersAsync() ?? new List<MemberDTO>();
-        availableSlots = await BookingService.GetAvailableSlotsAsync(DateTime.Now) ?? new List<TeeTimeSlotDTO>();
+        
+        // Get tee slots for today
+        await RefreshAvailableSlots(DateTime.Now);
+        
         await LoadBookingsForNext7Days();
 
         Console.WriteLine($"✅ Available members count: {availableMembers.Count}");
@@ -284,6 +307,34 @@
 
         // Ensure UI updates
         StateHasChanged();
+    }
+    
+    
+
+    // New method to refresh available slots for a given date
+    private async Task RefreshAvailableSlots(DateTime date)
+    {
+        Console.WriteLine($"📅 Refreshing available slots for date: {date:yyyy-MM-dd}");
+        availableSlots = await BookingService.GetAvailableSlotsAsync(date) ?? new List<TeeTimeSlotDTO>();
+        
+        if (availableSlots.Count == 0)
+        {
+            Console.WriteLine("⚠️ No slots available for the selected date");
+        }
+        else
+        {
+            Console.WriteLine($"✅ Found {availableSlots.Count} available slots");
+        }
+    }
+
+    // Add a DateChanged event handler for a new date selector
+    private async Task DateChanged(ChangeEventArgs e)
+    {
+        if (DateTime.TryParse(e.Value.ToString(), out DateTime selectedDate))
+        {
+            Console.WriteLine($"📅 Date selection changed to: {selectedDate:yyyy-MM-dd}");
+            await RefreshAvailableSlots(selectedDate);
+        }
     }
     
 }
