@@ -108,26 +108,54 @@ public class BookingService
             .ToListAsync();
     }
     
+    // This goes in your backend BookingService.cs
     public async Task<List<BookingDisplayDTO>> GetBookingsForMemberAsync(int memberId, DateTime? date = null)
     {
-        var query = _context.TeeTimeBookings
-            .Where(b => b.MemberId == memberId)
-            .Include(b => b.TeeTimeSlot)
-            .Include(b => b.Member)
-            .Select(b => new BookingDisplayDTO
-            {
-                MemberName = b.Member.Name,
-                BookingTime = b.TeeTimeSlot.BookingTime,
-                TeeTimeSlotId = b.TeeTimeSlotId,
-                Handicap = b.Member.Handicap
-            });
-
+        // First, find the tee time slots this member has booked
+        var memberBookingsQuery = _context.TeeTimeBookings
+            .Where(b => b.MemberId == memberId);
+        
+        // Apply date filter if provided
         if (date.HasValue)
         {
-            query = query.Where(b => b.BookingTime.Date == date.Value.Date);
+            memberBookingsQuery = memberBookingsQuery
+                .Include(b => b.TeeTimeSlot)
+                .Where(b => b.TeeTimeSlot.BookingTime.Date == date.Value.Date);
         }
-
-        return await query.ToListAsync();
+    
+        // Get the tee time slot IDs this member has booked
+        var teeTimeSlotIds = await memberBookingsQuery
+            .Select(b => b.TeeTimeSlotId)
+            .ToListAsync();
+        
+        Console.WriteLine($"Found {teeTimeSlotIds.Count} tee time slots for member {memberId}");
+    
+        // Now get ALL bookings for these tee time slots (including other members)
+        var allBookingsForSlots = await _context.TeeTimeBookings
+            .Include(b => b.TeeTimeSlot)
+            .Include(b => b.Member)
+            .Where(b => teeTimeSlotIds.Contains(b.TeeTimeSlotId))
+            .ToListAsync();
+        
+        Console.WriteLine($"Found {allBookingsForSlots.Count} total bookings across these tee time slots");
+    
+        // Map to DTOs
+        var result = allBookingsForSlots
+            .Select(b => new BookingDisplayDTO
+            {
+                TeeTimeSlotId = b.TeeTimeSlotId,
+                BookingTime = b.TeeTimeSlot.BookingTime,
+                MemberId = b.MemberId,
+                MemberName = b.Member.Name,
+                Handicap = b.Member.Handicap,
+                // Flag to highlight the selected member
+                IsSelectedMember = b.MemberId == memberId
+            })
+            .OrderBy(b => b.BookingTime)
+            .ThenBy(b => b.MemberName)
+            .ToList();
+        
+        return result;
     }
     
     public async Task<List<BookingDisplayDTO>> GetAllBookingsAsync(DateTime? date = null)

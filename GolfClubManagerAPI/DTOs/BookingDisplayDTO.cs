@@ -1,9 +1,10 @@
-namespace GolfClubManagerAPI.DTOs;
-
+// Update this in both your API and WASM projects
 public class BookingDisplayDTO
 {
-    public string MemberName { get; set; }
-    public DateTime BookingTime { get; set; }
     public int TeeTimeSlotId { get; set; }
-    public int Handicap { get; set; }
+    public DateTime BookingTime { get; set; }
+    public int MemberId { get; set; }
+    public string MemberName { get; set; }
+    public decimal Handicap { get; set; }
+    public bool IsSelectedMember { get; set; } = false; // New property to highlight selected member
 }

@@ -100,43 +100,75 @@
     </div>
 }
 
-
-
-
-
-
 <h3>Current Bookings</h3>
 
-<table class="table table-bordered table-hover">
+<table class="table table-bordered">
     <thead class="table-dark">
     <tr>
-        <th class="text-center">Date</th>
-        <th class="text-center">Time</th>
-        <th style="width: 40%;">Member Name</th> @* Wider column for names *@
-        @* <th class="text-center">Slot</th> *@
+        <th class="text-center">Date & Time</th>
+        <th style="width: 40%;">Players</th>
         <th class="text-center">Handicap</th>
     </tr>
     </thead>
     <tbody>
-    @foreach (var group in currentBookings.GroupBy(b => b.TeeTimeSlotId))
+    @{
+        // Group bookings by TeeTimeSlotId to show all members in the same booking group
+        var bookingGroups = currentBookings
+            .GroupBy(b => b.TeeTimeSlotId)
+            .OrderBy(g => g.First().BookingTime);
+    }
+
+    @foreach (var group in bookingGroups)
     {
-        @foreach (var booking in group)
+        var firstBooking = group.First();
+        var sortedMembers = group.OrderBy(b => !b.IsSelectedMember); // Show selected member first
+        var isFirst = true;
+
+        <tr class="table-secondary">
+            <th class="text-center align-middle" rowspan="@(group.Count() + 1)">
+                <div class="fw-bold">@firstBooking.BookingTime.ToString("dd MMM yyyy")</div>
+                <div class="fs-5">@firstBooking.BookingTime.ToString("HH:mm")</div>
+            </th>
+            <th colspan="2" class="text-center bg-primary text-white">
+                <strong>Tee Slot @firstBooking.TeeTimeSlotId</strong>
+            </th>
+        </tr>
+
+        @foreach (var booking in sortedMembers)
         {
-            <tr>
-                <td class="text-center">@booking.BookingTime.ToString("dd-MM-yyyy")</td>
-                <td class="text-center">@booking.BookingTime.ToString("HH:mm")</td>
-                <td>@booking.MemberName</td>
-                @* <td class="text-center">@booking.TeeTimeSlotId</td> *@
+            <tr class="@(booking.IsSelectedMember && selectedMemberId > 0 ? "table-success" : "")">
+                <td>
+                    @if (booking.IsSelectedMember && selectedMemberId > 0)
+                    {
+                        <span class="badge bg-success me-2">Selected</span>
+                    }
+                    @booking.MemberName
+                </td>
                 <td class="text-center">@booking.Handicap</td>
             </tr>
         }
-        <!-- Optional separator for groups -->
-        <tr class="table-secondary">
-            <td colspan="5"></td>
+
+        <!-- Add a separator between groups -->
+        <tr class="bg-light">
+            <td colspan="3" style="height: 10px;"></td>
         </tr>
     }
     </tbody>
 </table>
+
+@if (!currentBookings.Any())
+{
+    <div class="alert alert-info text-center">
+        No bookings found for the selected criteria.
+    </div>
+}
+
+@if (!currentBookings.Any())
+{
+    <div class="alert alert-info text-center">
+        No bookings found for the selected criteria.
+    </div>
+}
 
 
 
