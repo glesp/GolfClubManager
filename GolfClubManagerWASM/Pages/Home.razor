@@ -1,7 +1,137 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Fairway Hills Golf Club</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container py-5">
+    <!-- Hero Banner -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-dark text-white border-0 rounded-lg shadow">
+                <div class="card-body p-5" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('./images/golfcourse.webp') center/cover no-repeat;">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="display-4 fw-bold mb-3">Welcome to Fairway Hills Golf Club</h1>
+                            <p class="lead mb-4">Where passion for golf meets exceptional service</p>
+                            <div class="d-flex gap-3">
+                                <a href="/members" class="btn btn-success btn-lg px-4 py-2">
+                                    <i class="bi bi-people-fill me-2"></i> Our Members
+                                </a>
+                                <a href="/bookings" class="btn btn-primary btn-lg px-4 py-2">
+                                    <i class="bi bi-calendar-check me-2"></i> Book Tee Time
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-Welcome to your new app.
+    <!-- Quick Links Section -->
+    <div class="row mb-5 gy-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm hover-zoom">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-calendar-week text-success" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 class="card-title h4">Book a Tee Time</h3>
+                    <p class="card-text">Reserve your spot on our championship course with just a few clicks.</p>
+                    <a href="/bookings" class="btn btn-outline-success">Book Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm hover-zoom">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-people text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 class="card-title h4">Membership</h3>
+                    <p class="card-text">View and manage club members, track handicaps, and access member services.</p>
+                    <a href="/members" class="btn btn-outline-primary">View Members</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm hover-zoom">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-info-circle text-info" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 class="card-title h4">Club Information</h3>
+                    <p class="card-text">Learn about our facilities, tournaments, events, and club policies.</p>
+                    <button class="btn btn-outline-info" disabled>Coming Soon</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Club Highlights -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="text-center mb-4">About Fairway Hills Golf Club</h2>
+                    <p class="lead text-center mb-4">
+                        Founded in 1985, Fairway Hills Golf Club has been the premier destination for golf enthusiasts for over 35 years.
+                    </p>
+                    
+                    <div class="row mt-5 gy-4">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="text-center">
+                                <div class="mb-3">
+                                    <i class="bi bi-trophy text-warning" style="font-size: 2rem;"></i>
+                                </div>
+                                <h4>Championship Course</h4>
+                                <p>Our 18-hole championship course offers a challenging yet enjoyable experience for golfers of all skill levels.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-3">
+                            <div class="text-center">
+                                <div class="mb-3">
+                                    <i class="bi bi-person-lines-fill text-success" style="font-size: 2rem;"></i>
+                                </div>
+                                <h4>Expert Instruction</h4>
+                                <p>Our PGA-certified instructors offer private and group lessons to help you improve your game.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-3">
+                            <div class="text-center">
+                                <div class="mb-3">
+                                    <i class="bi bi-shop text-primary" style="font-size: 2rem;"></i>
+                                </div>
+                                <h4>Pro Shop</h4>
+                                <p>Visit our fully-stocked pro shop for the latest equipment, apparel, and accessories.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-3">
+                            <div class="text-center">
+                                <div class="mb-3">
+                                    <i class="bi bi-cup-hot text-danger" style="font-size: 2rem;"></i>
+                                </div>
+                                <h4>Clubhouse</h4>
+                                <p>Relax in our elegant clubhouse featuring dining facilities and event spaces.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-zoom {
+        transition: transform 0.3s ease;
+    }
+    
+    .hover-zoom:hover {
+        transform: translateY(-5px);
+    }
+</style>
