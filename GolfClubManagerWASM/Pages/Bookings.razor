@@ -302,12 +302,10 @@
     }
 
 
-
     private async Task BookTeeTime()
     {
         Console.WriteLine($"📌 Attempting to book tee time for members: {string.Join(", ", bookingFormModel.MemberIds)}");
-        
-        
+    
         // Check for invalid indices before looping
         for (int i = 0; i < 4; i++)  
         {
@@ -321,19 +319,35 @@
                 Console.WriteLine($"✅ Accessing MemberIds[{i}] = {bookingFormModel.MemberIds[i]}");
             }
         }
-        
+    
         var success = await BookingService.BookTeeTimeAsync(bookingFormModel);
         if (success)
         {
             Console.WriteLine("✅ Booking successful!");
-            await JS.InvokeVoidAsync("showToast", "successToast"); // ✅ Calls site.js function to show a success toast
-            currentBookings = await BookingService.GetBookingsForDateAsync(DateTime.Now);
+            await JS.InvokeVoidAsync("showToast", "successToast"); // Show success toast
+        
+            // Reload ALL bookings for the next 7 days, not just today's bookings
+            await LoadBookingsForNext7Days();
+        
+            // Reset the booking form
             bookingFormModel = new BookingDTO { MemberIds = new List<int> { 0, 0, 0, 0 } };
+        
+            // Refresh available slots for the current date to hide booked slots
+            if (availableSlots.Any())
+            {
+                // Get date from the first available slot to refresh the same date
+                var currentDate = availableSlots.First().BookingTime.Date;
+                await RefreshAvailableSlots(currentDate);
+            }
+            else
+            {
+                await RefreshAvailableSlots(DateTime.Now);
+            }
         }
         else
         {   
             Console.WriteLine("❌ Booking failed. Please try again.");
-            await JS.InvokeVoidAsync("showToast", "errorToast"); // ❌ Calls site.js function to show an error toast
+            await JS.InvokeVoidAsync("showToast", "errorToast"); // Show error toast
         }
     }
     
