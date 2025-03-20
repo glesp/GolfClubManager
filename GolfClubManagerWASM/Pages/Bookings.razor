@@ -227,17 +227,45 @@
     
     private async Task LoadBookingsForNext7Days()
     {
+        Console.WriteLine("📅 Loading bookings for the next 7 days...");
         currentBookings.Clear();
 
-        for (int i = 0; i < 7; i++)
+        try 
         {
-            var date = DateTime.Now.AddDays(i);
-            var bookingsForDay = await BookingService.GetBookingsForDateAsync(date);
-        
-            if (bookingsForDay != null)
+            for (int i = 0; i < 7; i++)
             {
-                currentBookings.AddRange(bookingsForDay);
+                var date = DateTime.Now.AddDays(i);
+                var formattedDate = date.ToString("yyyy-MM-dd");
+                Console.WriteLine($"📌 Fetching bookings for date: {formattedDate}");
+            
+                // Use the correct endpoint with the proper route pattern
+                var url = $"api/Booking/bookingsForDate/{formattedDate}";
+                var bookingsForDay = await Http.GetFromJsonAsync<List<BookingDisplayDTO>>(url) ?? new List<BookingDisplayDTO>();
+            
+                if (bookingsForDay.Any())
+                {
+                    Console.WriteLine($"✅ Found {bookingsForDay.Count} bookings for {formattedDate}");
+                    currentBookings.AddRange(bookingsForDay);
+                }
+                else
+                {
+                    Console.WriteLine($"ℹ️ No bookings found for {formattedDate}");
+                }
             }
+        
+            // Log the total number of bookings loaded
+            Console.WriteLine($"📊 Total bookings loaded: {currentBookings.Count}");
+        
+            // Sort the bookings by date/time for better display
+            currentBookings = currentBookings
+                .OrderBy(b => b.BookingTime)
+                .ToList();
+        
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error loading bookings: {ex.Message}");
         }
     }
 
@@ -289,25 +317,62 @@
     }
 
     private async Task FetchBookingsForMember()
-    {
-        Console.WriteLine($"📌 Fetching bookings for {(selectedMemberId == 0 ? "All Members" : $"Member ID {selectedMemberId}")}");
+{
+    Console.WriteLine($"📌 Fetching bookings for {(selectedMemberId == 0 ? "All Members" : $"Member ID {selectedMemberId}")}");
 
+    try
+    {
         currentBookings.Clear();
 
         for (int i = 0; i < 7; i++)  // Loop for the next 7 days
         {
             var date = DateTime.Now.AddDays(i);
-            var url = selectedMemberId == 0 
-                ? $"api/booking/all?date={date:yyyy-MM-dd}" // Fetch all bookings
-                : $"api/booking/member/{selectedMemberId}?date={date:yyyy-MM-dd}"; // Fetch specific member's bookings
-
-            var bookingsForDay = await Http.GetFromJsonAsync<List<BookingDisplayDTO>>(url) ?? new List<BookingDisplayDTO>();
-            currentBookings.AddRange(bookingsForDay);
+            var formattedDate = date.ToString("yyyy-MM-dd");
+            Console.WriteLine($"📌 Checking date: {formattedDate}");
+            
+            List<BookingDisplayDTO> bookingsForDay;
+            
+            if (selectedMemberId == 0) 
+            {
+                // Use the correct endpoint for all bookings
+                var url = $"api/booking/all?date={formattedDate}";
+                Console.WriteLine($"🔍 Calling: {url}");
+                bookingsForDay = await Http.GetFromJsonAsync<List<BookingDisplayDTO>>(url) ?? new List<BookingDisplayDTO>();
+            }
+            else 
+            {
+                // Use the correct endpoint for member bookings
+                var url = $"api/booking/member/{selectedMemberId}?date={formattedDate}";
+                Console.WriteLine($"🔍 Calling: {url}");
+                bookingsForDay = await Http.GetFromJsonAsync<List<BookingDisplayDTO>>(url) ?? new List<BookingDisplayDTO>();
+            }
+            
+            if (bookingsForDay.Any())
+            {
+                Console.WriteLine($"✅ Found {bookingsForDay.Count} bookings for {formattedDate}");
+                currentBookings.AddRange(bookingsForDay);
+            }
+            else
+            {
+                Console.WriteLine($"ℹ️ No bookings found for {formattedDate}");
+            }
         }
-
+        
+        // Sort the bookings by date/time
+        currentBookings = currentBookings
+            .OrderBy(b => b.BookingTime)
+            .ToList();
+            
+        Console.WriteLine($"📊 Total bookings loaded: {currentBookings.Count}");
+        
         // Ensure UI updates
         StateHasChanged();
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Error fetching bookings: {ex.Message}");
+    }
+}
     
     
 
