@@ -8,9 +8,34 @@ main {
     flex: 1;
 }
 
-.sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+.nav-menu {
+    background: linear-gradient(180deg, #1b6ec2 0%, #2c7edb 100%);
+    color: white;
+    border-right: 1px solid #1861ac;
 }
+
+
+.sidebar {
+    background-color: #1b6ec2; /* matches .btn-primary background */
+    color: white;
+    border-right: 1px solid #1861ac;
+}
+
+
+.nav-item ::deep a {
+    color: #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.nav-item ::deep a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+.nav-item ::deep a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+    
 
 .top-row {
     background-color: #f7f7f7;

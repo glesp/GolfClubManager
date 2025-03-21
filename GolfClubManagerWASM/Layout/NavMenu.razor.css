@@ -11,6 +11,13 @@
     font-size: 1.1rem;
 }
 
+.nav-menu {
+    background: linear-gradient(180deg, #1b6ec2 0%, #2c7edb 100%);
+    color: white;
+    border-right: 1px solid #1861ac;
+}
+
+
 .bi {
     display: inline-block;
     position: relative;
