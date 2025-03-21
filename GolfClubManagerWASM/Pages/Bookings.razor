@@ -174,7 +174,7 @@
 
 <div aria-live="polite" aria-atomic="true" class="position-relative">
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <!-- ✅ Success Toast -->
+        <!--  Success Toast -->
         <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
@@ -184,7 +184,7 @@
             </div>
         </div>
 
-        <!-- ❌ Error Toast -->
+        <!--  Error Toast -->
         <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
@@ -214,17 +214,18 @@
         await RefreshAvailableSlots(DateTime.Now);
         
         await LoadBookingsForNext7Days();
-
-        Console.WriteLine($"✅ Available members count: {availableMembers.Count}");
-        Console.WriteLine($"✅ Available slots count: {availableSlots.Count}");
-        Console.WriteLine($"🔹 MemberIds before adjustment: {string.Join(", ", bookingFormModel.MemberIds)}");
+        
+        //Debugging backend for slot retrieval
+        Console.WriteLine($" Available members count: {availableMembers.Count}");
+        Console.WriteLine($" Available slots count: {availableSlots.Count}");
+        Console.WriteLine($" MemberIds before adjustment: {string.Join(", ", bookingFormModel.MemberIds)}");
 
         // Ensure MemberIds always has 4 elements
         while (bookingFormModel.MemberIds.Count < 4)
         {
             bookingFormModel.MemberIds.Add(0);
         }
-        Console.WriteLine($"✅ MemberIds initialized: {string.Join(", ", bookingFormModel.MemberIds)}");
+        Console.WriteLine($" MemberIds initialized: {string.Join(", ", bookingFormModel.MemberIds)}");
 
         StateHasChanged();
     }
@@ -233,7 +234,7 @@
     {
         if (index < 0 || index >= 4)  // Ensures index is always between 0 and 3
         {
-            Console.WriteLine($"❌ ERROR: Invalid index {index}, must be 0-3.");
+            Console.WriteLine($" ERROR: Invalid index {index}, must be 0-3.");
             return;
         }
 
@@ -248,12 +249,12 @@
 
         if (int.TryParse(e.Value.ToString(), out int selectedMemberId))
         {
-            Console.WriteLine($"✅ Changing MemberIds[{index}] to {selectedMemberId}");
+            Console.WriteLine($" Changing MemberIds[{index}] to {selectedMemberId}");
             bookingFormModel.MemberIds[index] = selectedMemberId;
         }
         else
         {
-            Console.WriteLine($"❌ ERROR: Invalid selection value {e.Value}");
+            Console.WriteLine($" ERROR: Invalid selection value {e.Value}");
         }
     }
     
@@ -268,7 +269,7 @@
             {
                 var date = DateTime.Now.AddDays(i);
                 var formattedDate = date.ToString("yyyy-MM-dd");
-                Console.WriteLine($"📌 Fetching bookings for date: {formattedDate}");
+                Console.WriteLine($" Fetching bookings for date: {formattedDate}");
             
                 // Use the correct endpoint with the proper route pattern
                 var url = $"api/Booking/bookingsForDate/{formattedDate}";
@@ -276,12 +277,12 @@
             
                 if (bookingsForDay.Any())
                 {
-                    Console.WriteLine($"✅ Found {bookingsForDay.Count} bookings for {formattedDate}");
+                    Console.WriteLine($" Found {bookingsForDay.Count} bookings for {formattedDate}");
                     currentBookings.AddRange(bookingsForDay);
                 }
                 else
                 {
-                    Console.WriteLine($"ℹ️ No bookings found for {formattedDate}");
+                    Console.WriteLine($" No bookings found for {formattedDate}");
                 }
             }
         
@@ -297,33 +298,33 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"❌ Error loading bookings: {ex.Message}");
+            Console.WriteLine($" Error loading bookings: {ex.Message}");
         }
     }
 
 
     private async Task BookTeeTime()
     {
-        Console.WriteLine($"📌 Attempting to book tee time for members: {string.Join(", ", bookingFormModel.MemberIds)}");
+        Console.WriteLine($" Attempting to book tee time for members: {string.Join(", ", bookingFormModel.MemberIds)}");
     
         // Check for invalid indices before looping
         for (int i = 0; i < 4; i++)  
         {
             if (i >= bookingFormModel.MemberIds.Count)
             {
-                Console.WriteLine($"❌ ERROR: Index {i} is out of range! Current MemberIds: {string.Join(", ", bookingFormModel.MemberIds)}");
+                Console.WriteLine($" ERROR: Index {i} is out of range! Current MemberIds: {string.Join(", ", bookingFormModel.MemberIds)}");
                 return;  // Prevents the function from proceeding with a broken state
             }
             else
             {
-                Console.WriteLine($"✅ Accessing MemberIds[{i}] = {bookingFormModel.MemberIds[i]}");
+                Console.WriteLine($" Accessing MemberIds[{i}] = {bookingFormModel.MemberIds[i]}");
             }
         }
     
         var success = await BookingService.BookTeeTimeAsync(bookingFormModel);
         if (success)
         {
-            Console.WriteLine("✅ Booking successful!");
+            Console.WriteLine(" Booking successful!");
             await JS.InvokeVoidAsync("showToast", "successToast"); // Show success toast
         
             // Reload ALL bookings for the next 7 days, not just today's bookings
@@ -346,7 +347,7 @@
         }
         else
         {   
-            Console.WriteLine("❌ Booking failed. Please try again.");
+            Console.WriteLine(" Booking failed. Please try again.");
             await JS.InvokeVoidAsync("showToast", "errorToast"); // Show error toast
         }
     }
@@ -356,7 +357,7 @@
         if (int.TryParse(e.Value?.ToString(), out int memberId))
         {
             selectedMemberId = memberId;
-            Console.WriteLine($"📌 Member selection changed to: {(selectedMemberId == 0 ? "All Members" : $"Member ID {selectedMemberId}")}");
+            Console.WriteLine($" Member selection changed to: {(selectedMemberId == 0 ? "All Members" : $"Member ID {selectedMemberId}")}");
 
             await FetchBookingsForMember();
         }
@@ -364,7 +365,7 @@
 
     private async Task FetchBookingsForMember()
 {
-    Console.WriteLine($"📌 Fetching bookings for {(selectedMemberId == 0 ? "All Members" : $"Member ID {selectedMemberId}")}");
+    Console.WriteLine($" Fetching bookings for {(selectedMemberId == 0 ? "All Members" : $"Member ID {selectedMemberId}")}");
 
     try
     {
@@ -374,7 +375,7 @@
         {
             var date = DateTime.Now.AddDays(i);
             var formattedDate = date.ToString("yyyy-MM-dd");
-            Console.WriteLine($"📌 Checking date: {formattedDate}");
+            Console.WriteLine($" Checking date: {formattedDate}");
             
             List<BookingDisplayDTO> bookingsForDay;
             
@@ -395,7 +396,7 @@
             
             if (bookingsForDay.Any())
             {
-                Console.WriteLine($"✅ Found {bookingsForDay.Count} bookings for {formattedDate}");
+                Console.WriteLine($" Found {bookingsForDay.Count} bookings for {formattedDate}");
                 currentBookings.AddRange(bookingsForDay);
             }
             else
@@ -409,14 +410,14 @@
             .OrderBy(b => b.BookingTime)
             .ToList();
             
-        Console.WriteLine($"📊 Total bookings loaded: {currentBookings.Count}");
+        Console.WriteLine($" Total bookings loaded: {currentBookings.Count}");
         
         // Ensure UI updates
         StateHasChanged();
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"❌ Error fetching bookings: {ex.Message}");
+        Console.WriteLine($" Error fetching bookings: {ex.Message}");
     }
 }
     
@@ -425,16 +426,16 @@
     // New method to refresh available slots for a given date
     private async Task RefreshAvailableSlots(DateTime date)
     {
-        Console.WriteLine($"📅 Refreshing available slots for date: {date:yyyy-MM-dd}");
+        Console.WriteLine($" Refreshing available slots for date: {date:yyyy-MM-dd}");
         availableSlots = await BookingService.GetAvailableSlotsAsync(date) ?? new List<TeeTimeSlotDTO>();
         
         if (availableSlots.Count == 0)
         {
-            Console.WriteLine("⚠️ No slots available for the selected date");
+            Console.WriteLine(" No slots available for the selected date");
         }
         else
         {
-            Console.WriteLine($"✅ Found {availableSlots.Count} available slots");
+            Console.WriteLine($" Found {availableSlots.Count} available slots");
         }
     }
 
@@ -443,7 +444,7 @@
     {
         if (DateTime.TryParse(e.Value.ToString(), out DateTime selectedDate))
         {
-            Console.WriteLine($"📅 Date selection changed to: {selectedDate:yyyy-MM-dd}");
+            Console.WriteLine($" Date selection changed to: {selectedDate:yyyy-MM-dd}");
             await RefreshAvailableSlots(selectedDate);
         }
     }

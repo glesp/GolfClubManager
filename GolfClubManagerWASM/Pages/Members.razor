@@ -181,12 +181,12 @@
             members.Add(addedMember);
             newMember = new MemberCreateDTO(); // Reset form after submission
             ApplyFilters();
-            await JS.InvokeVoidAsync("showToast", "successToast"); // ✅ Show success toast
+            await JS.InvokeVoidAsync("showToast", "successToast"); // Show success toast
         }
         else
         {
-            errorMessage = "❌ Failed to Add Member";
-            await JS.InvokeVoidAsync("showToast", "errorToast"); // ❌ Show error toast
+            errorMessage = " Failed to Add Member";
+            await JS.InvokeVoidAsync("showToast", "errorToast"); //  Show error toast
         }
     }
 

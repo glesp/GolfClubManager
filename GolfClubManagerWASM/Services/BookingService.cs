@@ -26,7 +26,7 @@ namespace GolfClubManagerWASM.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error fetching available slots: {ex.Message}");
+                Console.WriteLine($" Error fetching available slots: {ex.Message}");
                 return new List<TeeTimeSlotDTO>();
             }
         }
@@ -35,29 +35,29 @@ namespace GolfClubManagerWASM.Services
         {
             try
             {
-                Console.WriteLine($"🔄 BookingService: Getting bookings for date {date:yyyy-MM-dd}");
+                Console.WriteLine($" BookingService: Getting bookings for date {date:yyyy-MM-dd}");
                 var formattedDate = date.ToString("yyyy-MM-dd");
         
                 // Use the correct route pattern that matches the controller
                 var url = $"api/Booking/bookingsForDate/{formattedDate}";
-                Console.WriteLine($"📌 Calling API: {url}");
+                Console.WriteLine($" Calling API: {url}");
         
                 var response = await _httpClient.GetFromJsonAsync<List<BookingDisplayDTO>>(url);
         
                 if (response != null)
                 {
-                    Console.WriteLine($"✅ Received {response.Count} bookings from API");
+                    Console.WriteLine($" Received {response.Count} bookings from API");
                     return response;
                 }
                 else
                 {
-                    Console.WriteLine("⚠️ API returned null response");
+                    Console.WriteLine("️ API returned null response");
                     return new List<BookingDisplayDTO>();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error fetching bookings: {ex.Message}");
+                Console.WriteLine($" Error fetching bookings: {ex.Message}");
                 return new List<BookingDisplayDTO>();
             }
         }
@@ -71,7 +71,7 @@ namespace GolfClubManagerWASM.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error booking tee time: {ex.Message}");
+                Console.WriteLine($" Error booking tee time: {ex.Message}");
                 return false;
             }
         }
@@ -85,7 +85,7 @@ namespace GolfClubManagerWASM.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error fetching members: {ex.Message}");
+                Console.WriteLine($" Error fetching members: {ex.Message}");
                 return new List<MemberDTO>();
             }
         }
@@ -105,7 +105,7 @@ namespace GolfClubManagerWASM.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error adding member: {ex.Message}");
+                Console.WriteLine($" Error adding member: {ex.Message}");
                 return 0;
             }
         }
