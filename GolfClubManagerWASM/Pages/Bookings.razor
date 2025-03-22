@@ -122,7 +122,6 @@
     {
         var firstBooking = group.First();
         var sortedMembers = group.OrderBy(b => !b.IsSelectedMember); // Show selected member first
-        var isFirst = true;
 
         <tr class="table-secondary">
             <th class="text-center align-middle" rowspan="@(group.Count() + 1)">
@@ -155,13 +154,6 @@
     }
     </tbody>
 </table>
-
-@if (!currentBookings.Any())
-{
-    <div class="alert alert-info text-center">
-        No bookings found for the selected criteria.
-    </div>
-}
 
 @if (!currentBookings.Any())
 {
@@ -244,7 +236,7 @@
             {
                 bookingFormModel.MemberIds.Add(0);
             }
-            Console.WriteLine($"🔄 Adjusted MemberIds: {string.Join(", ", bookingFormModel.MemberIds)}");
+            Console.WriteLine($" Adjusted MemberIds: {string.Join(", ", bookingFormModel.MemberIds)}");
         }
 
         if (int.TryParse(e.Value.ToString(), out int selectedMemberId))
@@ -439,10 +431,9 @@
         }
     }
 
-    // Add a DateChanged event handler for a new date selector
     private async Task DateChanged(ChangeEventArgs e)
     {
-        if (DateTime.TryParse(e.Value.ToString(), out DateTime selectedDate))
+        if (e.Value != null && DateTime.TryParse(e.Value.ToString(), out DateTime selectedDate))
         {
             Console.WriteLine($" Date selection changed to: {selectedDate:yyyy-MM-dd}");
             await RefreshAvailableSlots(selectedDate);

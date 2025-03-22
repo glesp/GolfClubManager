@@ -6,6 +6,14 @@
 
 <h3 class="text-center text-primary">👥 Members</h3>
 
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error:</strong> @errorMessage
+        <button type="button" class="btn-close" @onclick="() => errorMessage = string.Empty" aria-label="Close"></button>
+    </div>
+}
+
 <!-- Member Form -->
 <div class="card shadow-lg p-4 mb-4">
     <h5 class="card-title text-center">➕ Add New Member</h5>
@@ -98,7 +106,7 @@
     <table class="table table-striped table-hover text-center">
         <thead class="table-dark">
         <tr>
-            <th>Membership #</th>
+            <th>Member ID</th>
             <th class="w-25">Name</th>
             <th>Email</th>
             <th>Handicap</th>
@@ -108,7 +116,7 @@
         @foreach (var member in filteredMembers)
         {
             <tr>
-                <td>@member.MembershipNumber</td>
+                <td>@member.Id</td>
                 <td>@member.Name</td>
                 <td>@member.Email</td>
                 <td>@member.Handicap</td>
@@ -119,7 +127,7 @@
 </div>
 
 @code {
-    private List<Member> members = new();
+    private List<Member> members = new List<Member>();
     private List<Member> filteredMembers = new();
     private MemberCreateDTO newMember = new();
     private string errorMessage;
@@ -173,31 +181,66 @@
 
     private async Task AddMember()
     {
-        var response = await Http.PostAsJsonAsync("api/member", newMember);
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/member", newMember);
 
-        if (response.IsSuccessStatusCode)
-        {
-            var addedMember = await response.Content.ReadFromJsonAsync<Member>();
-            members.Add(addedMember);
-            newMember = new MemberCreateDTO(); // Reset form after submission
-            ApplyFilters();
-            await JS.InvokeVoidAsync("showToast", "successToast"); // Show success toast
+            if (response.IsSuccessStatusCode)
+            {
+                var addedMember = await response.Content.ReadFromJsonAsync<Member>();
+                if (addedMember != null) // Add null check
+                {
+                    members.Add(addedMember);
+                    newMember = new MemberCreateDTO(); // Reset form after submission
+                    ApplyFilters();
+                    await JS.InvokeVoidAsync("showToast", "successToast"); // Show success toast
+                }
+            }
+            else
+            {
+                errorMessage = "Failed to Add Member";
+                await JS.InvokeVoidAsync("showToast", "errorToast");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            errorMessage = " Failed to Add Member";
-            await JS.InvokeVoidAsync("showToast", "errorToast"); //  Show error toast
+            errorMessage = $"Error: {ex.Message}";
+            await JS.InvokeVoidAsync("showToast", "errorToast");
         }
     }
 
     private async Task FetchMembers()
     {
-        members = await Http.GetFromJsonAsync<List<Member>>("api/member");
-        ApplyFilters(); // Apply filters immediately after fetching
+        try
+        {
+            var fetchedMembers = await Http.GetFromJsonAsync<List<Member>>("api/member");
+        
+            if (fetchedMembers != null) // Add null check
+            {
+                members = fetchedMembers;
+                ApplyFilters(); // Apply filters immediately after fetching
+            }
+            else
+            {
+                members = new List<Member>(); // Initialize with empty list if null
+                Console.WriteLine("Warning: Fetched members returned null");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in FetchMembers: {ex.Message}");
+            errorMessage = $"Failed to fetch members: {ex.Message}";
+        }
     }
 
     private void ApplyFilters()
     {
+        if (members == null)
+        {
+            filteredMembers = new List<Member>();
+            return;
+        }
+    
         filteredMembers = members.Where(m =>
             (string.IsNullOrEmpty(selectedGender) || m.Gender == selectedGender) &&
             (selectedHandicapRange == "All" ||
@@ -206,16 +249,41 @@
              (selectedHandicapRange == "Above20" && m.Handicap > 20))
         ).ToList();
 
-        // Apply Sorting
+        // Updated sorting logic to handle surnames first, then first names
         filteredMembers = selectedSortOption switch
         {
-            "NameAsc" => filteredMembers.OrderBy(m => m.Name).ToList(),
-            "NameDesc" => filteredMembers.OrderByDescending(m => m.Name).ToList(),
+            "NameAsc" => filteredMembers
+                .OrderBy(m => GetSurname(m.Name))
+                .ThenBy(m => GetFirstName(m.Name))
+                .ToList(),
+            "NameDesc" => filteredMembers
+                .OrderByDescending(m => GetSurname(m.Name))
+                .ThenByDescending(m => GetFirstName(m.Name))
+                .ToList(),
             "HandicapAsc" => filteredMembers.OrderBy(m => m.Handicap).ToList(),
             "HandicapDesc" => filteredMembers.OrderByDescending(m => m.Handicap).ToList(),
             _ => filteredMembers
         };
 
         StateHasChanged();
+    }
+
+// Helper methods to extract surname and first name
+    private string GetSurname(string fullName)
+    {
+        if (string.IsNullOrEmpty(fullName))
+            return string.Empty;
+        
+        var parts = fullName.Trim().Split(' ');
+        return parts.Length > 1 ? parts[parts.Length - 1] : fullName;
+    }
+
+    private string GetFirstName(string fullName)
+    {
+        if (string.IsNullOrEmpty(fullName))
+            return string.Empty;
+        
+        var parts = fullName.Trim().Split(' ');
+        return parts.Length > 0 ? parts[0] : string.Empty;
     }
 }

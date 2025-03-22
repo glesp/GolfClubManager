@@ -19,7 +19,7 @@ namespace GolfClubManagerAPI.Services
         // Add a new member
         public async Task<Member> AddMemberAsync(Member member)
         {
-            // ✅ Backend Validation: Ensure Name, Email, Gender, and Handicap are valid
+            // Backend Validation: Ensure Name, Email, Gender, and Handicap are valid
             if (string.IsNullOrWhiteSpace(member.Name))
                 throw new ArgumentException("Member name is required.");
 
@@ -32,7 +32,7 @@ namespace GolfClubManagerAPI.Services
             if (member.Handicap < 0 || member.Handicap > 54)
                 throw new ArgumentException("Handicap must be between 0 and 54.");
 
-            // ✅ Generate MembershipNumber (auto-increment logic)
+            //  Generate MembershipNumber (auto-increment logic)
             var lastMember = await _context.Members
                 .OrderByDescending(m => m.MembershipNumber)
                 .FirstOrDefaultAsync();
@@ -83,7 +83,7 @@ namespace GolfClubManagerAPI.Services
                 }
             }
 
-            // 🔄 Sorting Logic
+            //  Sorting Logic
             bool descending = order == "desc";
             query = sortBy switch
             {
