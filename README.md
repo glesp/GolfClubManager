@@ -91,15 +91,7 @@ This application uses a clean architecture with:
 2. Select a member from the dropdown
 3. View all bookings for that member
 
-## Known Issues/Limitations
-- Update functionality for members is not yet implemented
-- Mobile responsiveness needs improvement
-- No authentication or user roles implemented
-- Limited error handling for network issues
-
 ## Future Enhancements
-- Complete CRUD operations for all entities
-- Add statistics dashboard
 - Implement user authentication and role-based access
 - Improve UI/UX on mobile devices
 - Add email notifications for bookings
