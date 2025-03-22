@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GolfClubManagerAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250218164116_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250322232304_InitialSetup")]
+    partial class InitialSetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,18 +44,14 @@ namespace GolfClubManagerAPI.Migrations
                     b.Property<int>("Handicap")
                         .HasColumnType("int");
 
-                    b.Property<string>("MembershipNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("MembershipNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MembershipNumber")
-                        .IsUnique();
 
                     b.ToTable("Members");
                 });
@@ -68,28 +64,64 @@ namespace GolfClubManagerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("BookingTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeeTimeSlotId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MemberId");
 
+                    b.HasIndex("TeeTimeSlotId");
+
                     b.ToTable("TeeTimeBookings");
+                });
+
+            modelBuilder.Entity("GolfClubManagerAPI.Data.TeeTimeSlot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("BookingTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TeeTimeSlots");
                 });
 
             modelBuilder.Entity("GolfClubManagerAPI.Data.TeeTimeBooking", b =>
                 {
                     b.HasOne("GolfClubManagerAPI.Data.Member", "Member")
-                        .WithMany()
+                        .WithMany("Bookings")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GolfClubManagerAPI.Data.TeeTimeSlot", "TeeTimeSlot")
+                        .WithMany("Bookings")
+                        .HasForeignKey("TeeTimeSlotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Member");
+
+                    b.Navigation("TeeTimeSlot");
+                });
+
+            modelBuilder.Entity("GolfClubManagerAPI.Data.Member", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("GolfClubManagerAPI.Data.TeeTimeSlot", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

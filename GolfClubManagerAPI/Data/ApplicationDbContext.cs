@@ -10,14 +10,18 @@ namespace GolfClubManagerAPI.Data
         public DbSet<TeeTimeSlot> TeeTimeSlots { get; set; }
         public DbSet<TeeTimeBooking> TeeTimeBookings { get; set; }
 
+        // In ApplicationDbContext.cs
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            // Unique constraint to ensure a member can only book once per day
-            modelBuilder.Entity<TeeTimeBooking>()
-                .HasIndex(b => new { b.MemberId, b.TeeTimeSlotId })
-                .IsUnique();
+    
+            // Membership Number Fix
+            modelBuilder.Entity<Member>()
+                .Property(m => m.MembershipNumber)
+                .IsRequired()
+                .HasColumnType("int");
+        
+            // Other configurations...
         }
     }
 }

@@ -69,10 +69,9 @@ namespace GolfClubManagerAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TeeTimeSlotId");
+                    b.HasIndex("MemberId");
 
-                    b.HasIndex("MemberId", "TeeTimeSlotId")
-                        .IsUnique();
+                    b.HasIndex("TeeTimeSlotId");
 
                     b.ToTable("TeeTimeBookings");
                 });
