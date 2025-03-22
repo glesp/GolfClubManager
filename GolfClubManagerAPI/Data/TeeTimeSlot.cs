@@ -10,7 +10,7 @@ namespace GolfClubManagerAPI.Data
         public int Id { get; set; }
 
         [Required]
-        public DateTime BookingTime { get; set; } // Time for the slot
+        public DateTime BookingTime { get; set; } 
 
         // Navigation property to related bookings
         public List<TeeTimeBooking> Bookings { get; set; } = new();

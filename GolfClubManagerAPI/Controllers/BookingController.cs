@@ -41,7 +41,7 @@ namespace GolfClubManagerAPI.Controllers
             var bookings = await _bookingService.GetBookingsForMemberAsync(memberId, date);
             if (bookings == null || bookings.Count == 0)
             {
-                return Ok(new List<BookingDisplayDTO>());  // Return an empty list instead of NotFound
+                return Ok(new List<BookingDisplayDTO>());  // Return an empty list if none are found
             }
             return Ok(bookings);
         }

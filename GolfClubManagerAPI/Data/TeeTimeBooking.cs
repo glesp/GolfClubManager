@@ -10,10 +10,10 @@ namespace GolfClubManagerAPI.Data
         public int Id { get; set; }
 
         [Required]
-        public int TeeTimeSlotId { get; set; } // FK for tee time slot
+        public int TeeTimeSlotId { get; set; } // Foreign Key for tee time slot
 
         [Required]
-        public int MemberId { get; set; } // FK for member
+        public int MemberId { get; set; } // Foreign Key for member
 
         // Navigation properties
         [ForeignKey("TeeTimeSlotId")]

@@ -13,12 +13,12 @@ public class BookingService
 
     public async Task<List<TeeTimeBooking>> CreateBookingAsync(BookingDTO bookingDTO)
     {
-        Console.WriteLine($"📌 Debug: Checking TeeTimeSlotId = {bookingDTO.TeeTimeSlotId}");
+        Console.WriteLine($" Debug: Checking TeeTimeSlotId = {bookingDTO.TeeTimeSlotId}");
 
         var teeTimeSlot = await _context.TeeTimeSlots.FindAsync(bookingDTO.TeeTimeSlotId);
         if (teeTimeSlot == null)
         {
-            Console.WriteLine($"❌ ERROR: Tee Time Slot with ID {bookingDTO.TeeTimeSlotId} not found in DB.");
+            Console.WriteLine($" ERROR: Tee Time Slot with ID {bookingDTO.TeeTimeSlotId} not found in DB.");
             throw new InvalidOperationException($"Tee Time Slot {bookingDTO.TeeTimeSlotId} not found.");
         }
 
@@ -28,7 +28,7 @@ public class BookingService
     
         foreach (var memberId in bookingDTO.MemberIds)
         {
-            if (memberId == 0) continue; // 🛑 Skip empty member slots
+            if (memberId == 0) continue; //  Skip empty member slots
             
             var existingBookings = await _context.TeeTimeBookings
                 .Include(b => b.TeeTimeSlot)
@@ -41,10 +41,10 @@ public class BookingService
                 Console.WriteLine($"🔍 DEBUG: Member {memberId} already booked on {booking.TeeTimeSlot.BookingTime:yyyy-MM-dd HH:mm}");
             }
 
-            Console.WriteLine($"📌 Requested Booking Date: {teeTimeSlot.BookingTime:yyyy-MM-dd HH:mm}");
+            Console.WriteLine($" Requested Booking Date: {teeTimeSlot.BookingTime:yyyy-MM-dd HH:mm}");
 
             
-            // 🛑 Check if this member already has a booking on the same day
+            //  Check if this member already has a booking on the same day
             bool alreadyBooked = await _context.TeeTimeBookings
                 .Where(b => b.MemberId == memberId)
                 .Select(b => new { BookingDate = b.TeeTimeSlot.BookingTime.Date })
@@ -53,18 +53,18 @@ public class BookingService
 
             if (alreadyBooked)
             {
-                Console.WriteLine($"❌ ERROR: Member {memberId} already booked on {bookingDate}");
+                Console.WriteLine($" ERROR: Member {memberId} already booked on {bookingDate}");
                 throw new InvalidOperationException($"Member {memberId} cannot book more than once per day.");
             }
 
 
             newBookings.Add(new TeeTimeBooking { TeeTimeSlotId = bookingDTO.TeeTimeSlotId, MemberId = memberId });
-            Console.WriteLine($"✅ Adding booking for MemberId: {memberId} at TeeTimeSlot {bookingDTO.TeeTimeSlotId}");
+            Console.WriteLine($" Adding booking for MemberId: {memberId} at TeeTimeSlot {bookingDTO.TeeTimeSlotId}");
         }
         
         if (newBookings.Count == 0)
         {
-            Console.WriteLine("❌ ERROR: No valid members selected for booking.");
+            Console.WriteLine(" ERROR: No valid members selected for booking.");
             throw new InvalidOperationException("At least one valid member is required to book.");
         }
         

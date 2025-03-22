@@ -40,7 +40,7 @@ namespace GolfClubManagerAPI.Services
             var newMembershipNumber = lastMember != null ? lastMember.MembershipNumber + 1 : 1;
             member.MembershipNumber = newMembershipNumber;
 
-            // ✅ Save valid member to the database
+            //  Save valid member to the database
             _context.Members.Add(member);
             await _context.SaveChangesAsync();
     
